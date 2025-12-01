@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Countdown Run – DE ➜ FI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Pixel font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #050608;
+      --fg: #f8f8f8;
+      --accent: #ffd15c;
+      --accent2: #3a3f4d;
+      --accent2-light: #d6d7df;
+      --line: #2a2a33;
+      --snow: rgba(255,255,255,0.9);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #141625 0, #050608 55%);
+      color: var(--fg);
+      font-family: "Press Start 2P", system-ui, -apple-system, BlinkMacSystemFont,
+                   "Segoe UI", sans-serif;
+      text-align: center;
+      padding: 24px 10px 40px;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      font-size: 16px;
+      margin-bottom: 12px;
+      text-shadow: 0 0 4px #000;
+    }
+
+    .subtitle {
+      font-size: 10px;
+      opacity: 0.8;
+      margin-bottom: 24px;
+    }
+
+    .scene {
+      max-width: 820px;
+      margin: 0 auto;
+      border: 4px solid var(--fg);
+      background:
+        radial-gradient(circle at top, #252a44 0, #151725 50%, #0b0d13 100%);
+      padding: 32px 24px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scene::before {
+      /* starry / snowy sky texture */
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,0.4) 0, transparent 3px),
+        radial-gradient(circle, rgba(255,255,255,0.2) 0, transparent 2px);
+      background-size: 80px 80px, 120px 120px;
+      background-position: 10px 20px, 60px 40px;
+      mix-blend-mode: screen;
+      opacity: 0.25;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .time-label {
+      position: relative;
+      font-size: 10px;
+      margin-bottom: 20px;
+      z-index: 1;
+    }
+
+    .time-label span {
+      color: var(--accent);
+    }
+
+    .countdown {
+      position: relative;
+      font-size: 14px;
+      margin-bottom: 26px;
+      z-index: 1;
+      text-shadow: 0 0 4px #000;
+    }
+
+    .countdown small {
+      display: block;
+      font-size: 9px;
+      opacity: 0.8;
+      margin-top: 6px;
+    }
+
+    .track-wrapper {
+      position: relative;
+      z-index: 1;
+      padding: 16px 8px 4px;
+    }
+
+    .track {
+      position: relative;
+      height: 110px;
+      border-top: 3px solid var(--line);
+      border-bottom: 3px solid var(--line);
+      background:
+        repeating-linear-gradient(
+          to right,
+          #1a1c28 0,
+          #1a1c28 8px,
+          #202233 8px,
+          #202233 16px
+        );
+      box-shadow: 0 0 0 3px #000 inset;
+      overflow: hidden;
+    }
+
+    .ground {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 34px;
+      background:
+        linear-gradient(to top, #1d2130 0, #23273a 35%, #2d3042 100%);
+      border-top: 3px solid #000;
+    }
+
+    /* Snow on ground */
+    .ground::before {
+      content: "";
+      position: absolute;
+      inset: -4px -8px auto;
+      height: 18px;
+      background:
+        repeating-linear-gradient(
+          to right,
+          rgba(255,255,255,0.9) 0,
+          rgba(255,255,255,0.9) 6px,
+          rgba(220,230,255,0.8) 6px,
+          rgba(220,230,255,0.8) 12px
+        );
+      opacity: 0.9;
+      box-shadow: 0 0 0 2px rgba(0,0,0,0.6);
+    }
+
+    /* === DECOR: mushrooms & plants === */
+
+    .decor {
+      position: absolute;
+      bottom: 26px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+      pointer-events: none;
+    }
+
+    .decor-left {
+      left: 14px;
+    }
+
+    .decor-right {
+      right: 80px;
+    }
+
+    .mushroom,
+    .plant {
+      position: relative;
+      image-rendering: pixelated;
+      animation: decorBob 2.6s ease-in-out infinite;
+    }
+
+    @keyframes decorBob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-1px); }
+    }
+
+    /* simple pixel mushrooms */
+    .mushroom::before {
+      content: "";
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #e0d3ff; /* stem */
+      box-shadow:
+        0 4px #e0d3ff,
+        0 8px #e0d3ff;
+    }
+    .mushroom::after {
+      content: "";
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #ff4b6a;
+      top: -4px;
+      left: -2px;
+      box-shadow:
+        4px 0 #ff4b6a,
+        8px 0 #ff4b6a,
+        12px 0 #ff4b6a;
+    }
+
+    .mushroom.small::before {
+      transform: scale(0.8);
+    }
+    .mushroom.small::after {
+      transform: scale(0.8);
+    }
+
+    /* fern-like plant */
+    .plant::before {
+      content: "";
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #7ad990;
+      top: -2px;
+      left: 0;
+      box-shadow:
+        0 4px #7ad990,
+        0 8px #7ad990,
+        -4px 4px #7ad990,
+        4px 4px #7ad990,
+        -4px 8px #7ad990,
+        4px 8px #7ad990;
+    }
+
+    /* === FLAGS === */
+
+    .flag {
+      position: absolute;
+      bottom: 62px;
+      width: 30px;
+      height: 18px;
+      box-shadow: 0 0 0 2px #000;
+      transform-origin: left center;
+      animation: flagWave 1.8s ease-in-out infinite;
+    }
+
+    .flag-start {
+      left: 16px;
+    }
+
+    .flag-end {
+      right: 30px;
+    }
+
+    @keyframes flagWave {
+      0%, 100% { transform: skewX(0deg); }
+      50% { transform: skewX(3deg); }
+    }
+
+    /* German flag */
+    .flag-de {
+      background:
+        linear-gradient(
+          to bottom,
+          #000 0 33%,
+          #dd0000 33% 66%,
+          #ffce00 66% 100%
+        );
+    }
+
+    /* Finnish flag: white with blue cross using ::before */
+    .flag-fi {
+      background: #ffffff;
+      position: absolute;
+    }
+    .flag-fi::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(
+          to right,
+          transparent 0 30%,
+          #003580 30% 45%,
+          transparent 45% 100%
+        ),
+        linear-gradient(
+          to bottom,
+          transparent 0 40%,
+          #003580 40% 60%,
+          transparent 60% 100%
+        );
+      opacity: 0.98;
+    }
+
+    /* === RUNNER (bearded pixel "you") === */
+
+    .runner {
+      position: absolute;
+      bottom: 34px; /* on ground snow */
+      left: 12px;
+      width: 26px;
+      height: 34px;
+      image-rendering: pixelated;
+      transform-origin: center bottom;
+      animation: runnerBob 0.42s infinite steps(2);
+    }
+
+    .runner-part {
+      position: absolute;
+      image-rendering: pixelated;
+    }
+
+    /* Hair: dark, slightly swept */
+    .runner-hair {
+      width: 4px;
+      height: 4px;
+      background: #2d2119;
+      top: -4px;
+      left: 6px;
+      box-shadow:
+        4px 0 #2d2119,
+        8px 0 #2d2119,
+        12px 0 #2d2119,
+        0 4px #2d2119,
+        4px 4px #2d2119,
+        8px 4px #2d2119;
+    }
+
+    /* Head / skin */
+    .runner-head {
+      width: 4px;
+      height: 4px;
+      background: #f5d6b1;
+      top: 0;
+      left: 6px;
+      box-shadow:
+        4px 0 #f5d6b1,
+        8px 0 #f5d6b1,
+        12px 0 #f5d6b1,
+        0 4px #f5d6b1,
+        4px 4px #f5d6b1,
+        8px 4px #f5d6b1,
+        4px 8px #f5d6b1;
+    }
+
+    /* Beard */
+    .runner-beard {
+      width: 4px;
+      height: 4px;
+      background: #2b1c14;
+      top: 8px;
+      left: 4px;
+      box-shadow:
+        4px 0 #2b1c14,
+        8px 0 #2b1c14,
+        12px 0 #2b1c14,
+        4px 4px #2b1c14,
+        8px 4px #2b1c14;
+    }
+
+    /* Body: dark sweater with light pattern */
+    .runner-body {
+      width: 4px;
+      height: 4px;
+      background: var(--accent2);
+      top: 14px;
+      left: 4px;
+      box-shadow:
+        4px 0 var(--accent2),
+        8px 0 var(--accent2),
+        12px 0 var(--accent2),
+        16px 0 var(--accent2),
+        0 4px var(--accent2),
+        4px 4px var(--accent2),
+        8px 4px var(--accent2),
+        12px 4px var(--accent2),
+        16px 4px var(--accent2),
+        4px 8px var(--accent2),
+        8px 8px var(--accent2),
+        12px 8px var(--accent2),
+        /* pattern row */
+        4px 12px var(--accent2-light),
+        8px 12px var(--accent2-light),
+        12px 12px var(--accent2-light);
+    }
+
+    /* Arms */
+    .runner-arm {
+      width: 4px;
+      height: 10px;
+      background: var(--accent2);
+      top: 16px;
+      transform-origin: top center;
+      animation: armRun 0.42s infinite ease-in-out;
+    }
+
+    .runner-arm-left {
+      left: 2px;
+    }
+    .runner-arm-right {
+      left: 18px;
+      animation-delay: 0.21s;
+    }
+
+    /* Tiny tattoo hint on right hand */
+    .runner-arm-right::after {
+      content: "";
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: #111;
+      bottom: 0;
+      right: 0;
+    }
+
+    /* Legs */
+    .runner-leg {
+      width: 4px;
+      height: 11px;
+      background: #32384b;
+      bottom: 0;
+      transform-origin: top center;
+      box-shadow: 0 4px #32384b;
+      animation: legRun 0.42s infinite ease-in-out;
+    }
+
+    .runner-leg-left {
+      left: 6px;
+    }
+
+    .runner-leg-right {
+      left: 12px;
+      animation-delay: 0.21s;
+    }
+
+    @keyframes runnerBob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(1px); }
+    }
+
+    @keyframes legRun {
+      0%, 100% { transform: rotate(18deg); }
+      50% { transform: rotate(-18deg); }
+    }
+
+    @keyframes armRun {
+      0%, 100% { transform: rotate(-18deg); }
+      50% { transform: rotate(18deg); }
+    }
+
+    /* === GOAL === */
+
+    .goal {
+      position: absolute;
+      bottom: 34px;
+      right: 28px;
+      width: 46px;
+      height: 66px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transform-origin: bottom center;
+    }
+
+    .goal-pole {
+      width: 4px;
+      height: 42px;
+      background: #c7b28a;
+      box-shadow: 0 0 0 2px #000;
+    }
+
+    .goal-flag {
+      width: 34px;
+      height: 20px;
+      background: var(--accent);
+      box-shadow: 0 0 0 2px #000;
+      position: relative;
+      clip-path: polygon(0 0, 100% 0, 70% 50%, 100% 100%, 0 100%);
+    }
+
+    .goal-date {
+      font-size: 8px;
+      text-align: center;
+      padding: 2px 4px;
+      background: #000;
+      border: 2px solid var(--accent);
+      box-shadow: 0 0 0 2px #000;
+    }
+
+    .footer-text {
+      margin-top: 18px;
+      font-size: 8px;
+      opacity: 0.8;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-text span {
+      color: var(--accent);
+    }
+
+    /* Floating Undertale-style heart easter egg */
+    .heart {
+      position: fixed;
+      right: 10px;
+      bottom: 8px;
+      width: 8px;
+      height: 8px;
+      image-rendering: pixelated;
+      opacity: 0.7;
+      animation: heartPulse 1.4s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .heart::before {
+      content: "";
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #ff2646;
+      box-shadow:
+        4px 0 #ff2646,
+        8px 0 #ff2646,
+        0 4px #ff2646,
+        4px 4px #ff2646,
+        8px 4px #ff2646,
+        4px 8px #ff2646;
+    }
+
+    @keyframes heartPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+    }
+
+    /* === SNOW === */
+
+    #snow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .snowflake {
+      position: absolute;
+      top: -10px;
+      width: 4px;
+      height: 4px;
+      background: var(--snow);
+      border-radius: 50%;
+      opacity: 0.9;
+      filter: blur(0.5px);
+      animation-name: snowFall;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    @keyframes snowFall {
+      0% {
+        transform: translateY(-10vh);
+      }
+      100% {
+        transform: translateY(110vh);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .scene {
+        padding: 24px 12px 32px;
+      }
+      h1 {
+        font-size: 14px;
+      }
+      .countdown {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1 id="headline">DAYS REMAIN</h1>
+  <p class="subtitle">From <span style="color:#ffd15c;">Germany</span> to <span style="color:#ffd15c;">Finland</span> &mdash; keep running.</p>
+
+  <div class="scene">
+    <div class="time-label">
+      Start: <span>31.05.2025</span> &nbsp;|&nbsp;
+      Goal: <span>15.01.2026 &bull; 17:00</span>
+    </div>
+
+    <div id="countdown" class="countdown">
+      Loading countdown...
+      <small>Time left until you reach the goal.</small>
+    </div>
+
+    <div class="track-wrapper">
+      <div id="track" class="track">
+        <div class="ground"></div>
+
+        <!-- Decorations -->
+        <div class="decor decor-left">
+          <div class="mushroom"></div>
+          <div class="mushroom small"></div>
+          <div class="plant"></div>
+        </div>
+
+        <div class="decor decor-right">
+          <div class="mushroom"></div>
+          <div class="plant"></div>
+        </div>
+
+        <!-- Flags -->
+        <div class="flag flag-de flag-start" title="Start – Germany"></div>
+
+        <!-- Runner (pixel-art you) -->
+        <div id="runner" class="runner">
+          <div class="runner-part runner-hair"></div>
+          <div class="runner-part runner-head"></div>
+          <div class="runner-part runner-beard"></div>
+          <div class="runner-part runner-body"></div>
+          <div class="runner-part runner-arm runner-arm-left"></div>
+          <div class="runner-part runner-arm runner-arm-right"></div>
+          <div class="runner-part runner-leg runner-leg-left"></div>
+          <div class="runner-part runner-leg runner-leg-right"></div>
+        </div>
+
+        <!-- Goal -->
+        <div id="goal" class="goal">
+          <div class="goal-pole"></div>
+          <div class="goal-flag"></div>
+          <div class="goal-date">15.01.26<br>17:00</div>
+        </div>
+
+        <div class="flag flag-fi flag-end" title="Goal – Finland"></div>
+      </div>
+    </div>
+
+    <p id="footerText" class="footer-text">
+      * Good things take time. <span>Keep moving forward through the snow.</span>
+    </p>
+  </div>
+
+  <!-- Snow overlay -->
+  <div id="snow"></div>
+
+  <!-- Tiny Undertale-ish heart -->
+  <div class="heart" title="Stay determined."></div>
+
+  <script>
+    // Target and start times in local time
+    const target = new Date(2026, 0, 15, 17, 0, 0);  // 15 Jan 2026 17:00
+    const start  = new Date(2025, 4, 31, 0, 0, 0);   // 31 May 2025
+
+    const countdownEl = document.getElementById("countdown");
+    const runnerEl = document.getElementById("runner");
+    const trackEl = document.getElementById("track");
+    const goalEl = document.getElementById("goal");
+    const footerText = document.getElementById("footerText");
+    const headline = document.getElementById("headline");
+
+    const totalDuration = target.getTime() - start.getTime();
+
+    function pad(num) {
+      return String(num).padStart(2, "0");
+    }
+
+    function update() {
+      const now = new Date();
+      let diff = target.getTime() - now.getTime();
+      if (diff < 0) diff = 0;
+
+      const seconds = Math.floor(diff / 1000) % 60;
+      const minutes = Math.floor(diff / (1000 * 60)) % 60;
+      const hours   = Math.floor(diff / (1000 * 60 * 60)) % 24;
+      const days    = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+      // Dynamic headline like Majora's Mask: "X DAYS REMAIN"
+      headline.textContent = `${days} DAYS REMAIN`;
+
+      if (diff > 0) {
+        countdownEl.innerHTML =
+          `${pad(days)}d : ${pad(hours)}h : ${pad(minutes)}m : ${pad(seconds)}s` +
+          `<small>Time left until you reach the goal.</small>`;
+      } else {
+        countdownEl.innerHTML =
+          `00d : 00h : 00m : 00s` +
+          `<small>Goal reached! You made it.</small>`;
+        footerText.innerHTML =
+          `* <span>You did it.</span> Thank you for staying determined.`;
+      }
+
+      // Runner position along the track
+      const nowClamped = Math.min(Math.max(now.getTime(), start.getTime()), target.getTime());
+      const elapsed = nowClamped - start.getTime();
+      const ratio = totalDuration > 0 ? elapsed / totalDuration : 1; // 0 → 1
+
+      const trackWidth = trackEl.clientWidth;
+      const runnerWidth = 26;
+      const goalRightMargin = 70;
+      const startX = 20;
+      const endX = trackWidth - goalRightMargin - runnerWidth;
+      const x = startX + (endX - startX) * ratio;
+
+      runnerEl.style.left = `${Math.max(startX, Math.min(endX, x))}px`;
+
+      // Slightly scale the goal as you get closer
+      const goalScale = 0.9 + 0.3 * ratio;
+      goalEl.style.transform = `scale(${goalScale})`;
+    }
+
+    update();
+    setInterval(update, 1000);
+
+    // === SNOW CREATION ===
+    (function createSnow() {
+      const snowContainer = document.getElementById("snow");
+      const flakes = 90;
+      for (let i = 0; i < flakes; i++) {
+        const span = document.createElement("span");
+        span.className = "snowflake";
+        const size = Math.random() * 3 + 2;
+        span.style.width = size + "px";
+        span.style.height = size + "px";
+        span.style.left = Math.random() * 100 + "vw";
+        span.style.animationDuration = 6 + Math.random() * 8 + "s";
+        span.style.animationDelay = Math.random() * 8 + "s";
+        snowContainer.appendChild(span);
+      }
+    })();
+  </script>
+</body>
+</html>
