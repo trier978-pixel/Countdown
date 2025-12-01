@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Countdown Run – DE ➜ FI</title>
+  <title>DE ➜ FI Countdown Run</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Pixel font -->
@@ -19,6 +19,9 @@
       --accent2-light: #d6d7df;
       --line: #2a2a33;
       --snow: rgba(255,255,255,0.9);
+      --aurora1: #4be3ff;
+      --aurora2: #9bff76;
+      --aurora3: #ffb7ff;
     }
 
     * {
@@ -46,7 +49,77 @@
     .subtitle {
       font-size: 10px;
       opacity: 0.8;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
+    }
+    .subtitle span {
+      color: var(--accent);
+    }
+
+    /* stats bar */
+    .stats {
+      max-width: 820px;
+      margin: 0 auto 10px;
+      font-size: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      opacity: 0.9;
+    }
+    .stat-pill {
+      padding: 4px 6px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .stat-pill span {
+      color: var(--accent);
+    }
+
+    /* progress bar */
+    .progress-wrap {
+      max-width: 820px;
+      margin: 0 auto 14px;
+      font-size: 8px;
+    }
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 2px;
+      opacity: 0.8;
+    }
+    .progress-bar {
+      position: relative;
+      height: 10px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #111621;
+      box-shadow: 0 0 0 2px #000;
+    }
+    .progress-fill {
+      position: absolute;
+      inset: 0;
+      width: 0%;
+      background: linear-gradient(90deg, #ff4b6a, #ffd15c, #7ad990, #4be3ff, #c68fff);
+      box-shadow: 0 0 10px rgba(255,255,255,0.4);
+      transition: width 0.6s ease-out;
+    }
+    .progress-marker {
+      position: absolute;
+      top: -2px;
+      width: 2px;
+      height: 14px;
+      background: rgba(255,255,255,0.4);
+    }
+    .progress-marker::after {
+      content: "";
+      position: absolute;
+      top: -4px;
+      left: -2px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.8);
     }
 
     .scene {
@@ -61,28 +134,46 @@
     }
 
     .scene::before {
-      /* starry / snowy sky texture */
       content: "";
       position: absolute;
       inset: 0;
-      background-image:
-        radial-gradient(circle, rgba(255,255,255,0.4) 0, transparent 3px),
-        radial-gradient(circle, rgba(255,255,255,0.2) 0, transparent 2px);
-      background-size: 80px 80px, 120px 120px;
-      background-position: 10px 20px, 60px 40px;
+      background:
+        radial-gradient(circle at 15% 0, rgba(255,255,255,0.25) 0, transparent 40%),
+        radial-gradient(circle at 85% 0, rgba(255,255,255,0.15) 0, transparent 45%);
+      opacity: 0.2;
       mix-blend-mode: screen;
-      opacity: 0.25;
       pointer-events: none;
       z-index: 0;
+    }
+
+    .aurora {
+      position: absolute;
+      top: 0;
+      left: -15%;
+      width: 130%;
+      height: 100px;
+      background:
+        radial-gradient(circle at 0% 80%, transparent 0, transparent 35%, rgba(0,0,0,0.8) 80%),
+        linear-gradient(120deg, var(--aurora1), var(--aurora2), var(--aurora3));
+      opacity: 0.4;
+      mix-blend-mode: screen;
+      filter: blur(4px);
+      animation: auroraDrift 18s ease-in-out infinite alternate;
+      z-index: 0;
+    }
+
+    @keyframes auroraDrift {
+      0%   { transform: translateX(0) translateY(0); }
+      50%  { transform: translateX(-5%) translateY(4px); }
+      100% { transform: translateX(5%) translateY(-4px); }
     }
 
     .time-label {
       position: relative;
       font-size: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       z-index: 1;
     }
-
     .time-label span {
       color: var(--accent);
     }
@@ -90,11 +181,10 @@
     .countdown {
       position: relative;
       font-size: 14px;
-      margin-bottom: 26px;
+      margin-bottom: 18px;
       z-index: 1;
       text-shadow: 0 0 4px #000;
     }
-
     .countdown small {
       display: block;
       font-size: 9px;
@@ -105,24 +195,112 @@
     .track-wrapper {
       position: relative;
       z-index: 1;
-      padding: 16px 8px 4px;
+      padding: 18px 8px 10px;
     }
 
     .track {
       position: relative;
-      height: 110px;
+      height: 150px;
       border-top: 3px solid var(--line);
       border-bottom: 3px solid var(--line);
       background:
-        repeating-linear-gradient(
-          to right,
-          #1a1c28 0,
-          #1a1c28 8px,
-          #202233 8px,
-          #202233 16px
-        );
+        linear-gradient(to top, #050811 0, #0c101f 50%, #151a2c 100%);
       box-shadow: 0 0 0 3px #000 inset;
       overflow: hidden;
+    }
+
+    /* mountains parallax layer */
+    .mountains {
+      position: absolute;
+      inset: 28px 0 auto 0;
+      height: 70px;
+      background:
+        linear-gradient(135deg, transparent 60%, #101320 61% 100%) 0 0 / 120px 70px repeat-x,
+        linear-gradient(-135deg, transparent 60%, #141729 61% 100%) 60px 0 / 140px 80px repeat-x;
+      opacity: 0.8;
+      transform: translateX(0);
+      animation: mountainsDrift 40s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+    @keyframes mountainsDrift {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-80px); }
+    }
+
+    /* forest silhouettes */
+    .forest {
+      position: absolute;
+      inset: 65px 0 auto 0;
+      height: 50px;
+      background:
+        linear-gradient(to top, #060911 0, #101624 40%, transparent 100%);
+      box-shadow:
+        10px 0 0 #101624,
+        40px 0 0 #13182a,
+        70px 0 0 #101624,
+        110px 0 0 #141a2c,
+        160px 0 0 #101624;
+      opacity: 0.8;
+      filter: blur(0.5px);
+      animation: forestDrift 28s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+    @keyframes forestDrift {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-60px); }
+    }
+
+    /* moving clouds */
+    .clouds {
+      position: absolute;
+      inset: 10px 0 auto 0;
+      height: 32px;
+      background:
+        radial-gradient(circle at 20% 50%, rgba(255,255,255,0.45) 0, transparent 50%),
+        radial-gradient(circle at 60% 40%, rgba(255,255,255,0.35) 0, transparent 55%),
+        radial-gradient(circle at 90% 55%, rgba(255,255,255,0.35) 0, transparent 50%);
+      filter: blur(1px);
+      opacity: 0.4;
+      animation: cloudsDrift 50s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+    @keyframes cloudsDrift {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-120px); }
+    }
+
+    /* stars */
+    .stars {
+      position: absolute;
+      inset: 4px 0 auto 0;
+      height: 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: #fffbe8;
+      border-radius: 50%;
+      opacity: 0.4;
+      animation: starTwinkle 3s ease-in-out infinite;
+    }
+    .star.big {
+      width: 3px;
+      height: 3px;
+      opacity: 0.7;
+    }
+    .star.one { left: 10%; top: 6px; animation-delay: 0.3s; }
+    .star.two { left: 35%; top: 14px; animation-delay: 1.2s; }
+    .star.three { left: 60%; top: 8px; animation-delay: 0.8s; }
+    .star.four { left: 80%; top: 18px; animation-delay: 2.0s; }
+    @keyframes starTwinkle {
+      0%, 100% { opacity: 0.2; transform: scale(0.6); }
+      50% { opacity: 1; transform: scale(1); }
     }
 
     .ground {
@@ -130,48 +308,63 @@
       left: 0;
       right: 0;
       bottom: 0;
-      height: 34px;
+      height: 45px;
       background:
-        linear-gradient(to top, #1d2130 0, #23273a 35%, #2d3042 100%);
+        linear-gradient(to top, #1b2133 0, #20263a 40%, #293046 100%);
       border-top: 3px solid #000;
+      z-index: 1;
     }
-
-    /* Snow on ground */
     .ground::before {
       content: "";
       position: absolute;
       inset: -4px -8px auto;
-      height: 18px;
+      height: 20px;
       background:
         repeating-linear-gradient(
           to right,
-          rgba(255,255,255,0.9) 0,
-          rgba(255,255,255,0.9) 6px,
-          rgba(220,230,255,0.8) 6px,
-          rgba(220,230,255,0.8) 12px
+          rgba(255,255,255,0.95) 0,
+          rgba(255,255,255,0.95) 6px,
+          rgba(220,230,255,0.9) 6px,
+          rgba(220,230,255,0.9) 12px
         );
-      opacity: 0.9;
+      opacity: 0.95;
       box-shadow: 0 0 0 2px rgba(0,0,0,0.6);
     }
 
-    /* === DECOR: mushrooms & plants === */
+    /* sun & moon */
+    .orb {
+      position: absolute;
+      top: 8px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      filter: blur(0.3px);
+      pointer-events: none;
+      z-index: 1;
+      box-shadow: 0 0 10px rgba(255,255,255,0.8);
+    }
+    .sun {
+      background: radial-gradient(circle, #ffe38a 0, #ffae00 50%, #ff7a00 100%);
+      opacity: 0.0;
+    }
+    .moon {
+      background: radial-gradient(circle, #ffffff 0, #d0d8ff 50%, #8a93c7 100%);
+      box-shadow: 0 0 10px rgba(200,220,255,0.9);
+      opacity: 0.0;
+    }
 
+    /* DECOR: mushrooms & plants */
     .decor {
       position: absolute;
-      bottom: 26px;
+      bottom: 34px;
       display: flex;
       gap: 12px;
       align-items: flex-end;
       pointer-events: none;
+      z-index: 2;
     }
-
-    .decor-left {
-      left: 14px;
-    }
-
-    .decor-right {
-      right: 80px;
-    }
+    .decor-left { left: 14px; }
+    .decor-right { right: 80px; }
 
     .mushroom,
     .plant {
@@ -179,13 +372,11 @@
       image-rendering: pixelated;
       animation: decorBob 2.6s ease-in-out infinite;
     }
-
     @keyframes decorBob {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-1px); }
     }
 
-    /* simple pixel mushrooms */
     .mushroom::before {
       content: "";
       position: absolute;
@@ -209,15 +400,26 @@
         8px 0 #ff4b6a,
         12px 0 #ff4b6a;
     }
-
-    .mushroom.small::before {
-      transform: scale(0.8);
+    .mushroom.blue::after {
+      background: #4be3ff;
+      box-shadow:
+        4px 0 #4be3ff,
+        8px 0 #4be3ff,
+        12px 0 #4be3ff;
     }
+    .mushroom.purple::after {
+      background: #c68fff;
+      box-shadow:
+        4px 0 #c68fff,
+        8px 0 #c68fff,
+        12px 0 #c68fff;
+    }
+
+    .mushroom.small::before,
     .mushroom.small::after {
       transform: scale(0.8);
     }
 
-    /* fern-like plant */
     .plant::before {
       content: "";
       position: absolute;
@@ -235,32 +437,44 @@
         4px 8px #7ad990;
     }
 
-    /* === FLAGS === */
+    /* sparkles */
+    .sparkle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: #fffbe8;
+      border-radius: 50%;
+      animation: sparkleBlink 3s ease-in-out infinite;
+      opacity: 0.0;
+    }
+    .sparkle.one { left: 4px; bottom: 22px; animation-delay: 0.5s; }
+    .sparkle.two { left: 26px; bottom: 27px; animation-delay: 1.4s; }
+    .sparkle.three { right: 10px; bottom: 24px; animation-delay: 2.2s; }
 
+    @keyframes sparkleBlink {
+      0%, 80%, 100% { opacity: 0; transform: scale(0.3); }
+      85% { opacity: 1; transform: scale(1); }
+      90% { opacity: 0; transform: scale(0.4); }
+    }
+
+    /* flags */
     .flag {
       position: absolute;
-      bottom: 62px;
+      bottom: 80px;
       width: 30px;
       height: 18px;
       box-shadow: 0 0 0 2px #000;
       transform-origin: left center;
       animation: flagWave 1.8s ease-in-out infinite;
+      z-index: 2;
     }
-
-    .flag-start {
-      left: 16px;
-    }
-
-    .flag-end {
-      right: 30px;
-    }
+    .flag-start { left: 16px; }
+    .flag-end { right: 30px; }
 
     @keyframes flagWave {
       0%, 100% { transform: skewX(0deg); }
       50% { transform: skewX(3deg); }
     }
-
-    /* German flag */
     .flag-de {
       background:
         linear-gradient(
@@ -270,8 +484,6 @@
           #ffce00 66% 100%
         );
     }
-
-    /* Finnish flag: white with blue cross using ::before */
     .flag-fi {
       background: #ffffff;
       position: absolute;
@@ -296,25 +508,22 @@
       opacity: 0.98;
     }
 
-    /* === RUNNER (bearded pixel "you") === */
-
+    /* runner (you) */
     .runner {
       position: absolute;
-      bottom: 34px; /* on ground snow */
+      bottom: 43px;
       left: 12px;
       width: 26px;
       height: 34px;
       image-rendering: pixelated;
       transform-origin: center bottom;
       animation: runnerBob 0.42s infinite steps(2);
+      z-index: 3;
     }
-
     .runner-part {
       position: absolute;
       image-rendering: pixelated;
     }
-
-    /* Hair: dark, slightly swept */
     .runner-hair {
       width: 4px;
       height: 4px;
@@ -329,8 +538,6 @@
         4px 4px #2d2119,
         8px 4px #2d2119;
     }
-
-    /* Head / skin */
     .runner-head {
       width: 4px;
       height: 4px;
@@ -346,8 +553,6 @@
         8px 4px #f5d6b1,
         4px 8px #f5d6b1;
     }
-
-    /* Beard */
     .runner-beard {
       width: 4px;
       height: 4px;
@@ -361,8 +566,6 @@
         4px 4px #2b1c14,
         8px 4px #2b1c14;
     }
-
-    /* Body: dark sweater with light pattern */
     .runner-body {
       width: 4px;
       height: 4px;
@@ -382,13 +585,10 @@
         4px 8px var(--accent2),
         8px 8px var(--accent2),
         12px 8px var(--accent2),
-        /* pattern row */
         4px 12px var(--accent2-light),
         8px 12px var(--accent2-light),
         12px 12px var(--accent2-light);
     }
-
-    /* Arms */
     .runner-arm {
       width: 4px;
       height: 10px;
@@ -397,16 +597,11 @@
       transform-origin: top center;
       animation: armRun 0.42s infinite ease-in-out;
     }
-
-    .runner-arm-left {
-      left: 2px;
-    }
+    .runner-arm-left { left: 2px; }
     .runner-arm-right {
       left: 18px;
       animation-delay: 0.21s;
     }
-
-    /* Tiny tattoo hint on right hand */
     .runner-arm-right::after {
       content: "";
       position: absolute;
@@ -416,8 +611,6 @@
       bottom: 0;
       right: 0;
     }
-
-    /* Legs */
     .runner-leg {
       width: 4px;
       height: 11px;
@@ -427,11 +620,7 @@
       box-shadow: 0 4px #32384b;
       animation: legRun 0.42s infinite ease-in-out;
     }
-
-    .runner-leg-left {
-      left: 6px;
-    }
-
+    .runner-leg-left { left: 6px; }
     .runner-leg-right {
       left: 12px;
       animation-delay: 0.21s;
@@ -441,22 +630,43 @@
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(1px); }
     }
-
     @keyframes legRun {
       0%, 100% { transform: rotate(18deg); }
       50% { transform: rotate(-18deg); }
     }
-
     @keyframes armRun {
       0%, 100% { transform: rotate(-18deg); }
       50% { transform: rotate(18deg); }
     }
 
-    /* === GOAL === */
+    /* speech bubble */
+    .speech {
+      position: absolute;
+      bottom: 88px;
+      left: 40px;
+      max-width: 190px;
+      font-size: 8px;
+      padding: 6px 8px;
+      background: rgba(0,0,0,0.8);
+      border-radius: 8px;
+      border: 2px solid rgba(255,255,255,0.5);
+      text-align: left;
+      z-index: 4;
+    }
+    .speech::after {
+      content: "";
+      position: absolute;
+      left: 8px;
+      bottom: -6px;
+      border-width: 6px 6px 0 6px;
+      border-style: solid;
+      border-color: rgba(0,0,0,0.8) transparent transparent transparent;
+    }
 
+    /* goal + milestones */
     .goal {
       position: absolute;
-      bottom: 34px;
+      bottom: 43px;
       right: 28px;
       width: 46px;
       height: 66px;
@@ -465,15 +675,14 @@
       align-items: center;
       gap: 4px;
       transform-origin: bottom center;
+      z-index: 3;
     }
-
     .goal-pole {
       width: 4px;
       height: 42px;
       background: #c7b28a;
       box-shadow: 0 0 0 2px #000;
     }
-
     .goal-flag {
       width: 34px;
       height: 20px;
@@ -482,7 +691,6 @@
       position: relative;
       clip-path: polygon(0 0, 100% 0, 70% 50%, 100% 100%, 0 100%);
     }
-
     .goal-date {
       font-size: 8px;
       text-align: center;
@@ -492,6 +700,33 @@
       box-shadow: 0 0 0 2px #000;
     }
 
+    .milestone {
+      position: absolute;
+      bottom: 45px;
+      width: 26px;
+      height: 38px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 6px;
+      color: #fff;
+      z-index: 2;
+    }
+    .milestone-pole {
+      width: 3px;
+      height: 20px;
+      background: #c7b28a;
+      box-shadow: 0 0 0 2px #000;
+    }
+    .milestone-sign {
+      margin-bottom: 2px;
+      padding: 2px 3px;
+      background: #000;
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 2px #000;
+      white-space: nowrap;
+    }
+
     .footer-text {
       margin-top: 18px;
       font-size: 8px;
@@ -499,12 +734,11 @@
       position: relative;
       z-index: 1;
     }
-
     .footer-text span {
       color: var(--accent);
     }
 
-    /* Floating Undertale-style heart easter egg */
+    /* undertale-ish heart */
     .heart {
       position: fixed;
       right: 10px;
@@ -516,7 +750,6 @@
       animation: heartPulse 1.4s ease-in-out infinite;
       pointer-events: none;
     }
-
     .heart::before {
       content: "";
       position: absolute;
@@ -531,14 +764,12 @@
         8px 4px #ff2646,
         4px 8px #ff2646;
     }
-
     @keyframes heartPulse {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.3); }
     }
 
-    /* === SNOW === */
-
+    /* snow overlay */
     #snow {
       position: fixed;
       inset: 0;
@@ -546,7 +777,6 @@
       overflow: hidden;
       z-index: 10;
     }
-
     .snowflake {
       position: absolute;
       top: -10px;
@@ -560,34 +790,50 @@
       animation-timing-function: linear;
       animation-iteration-count: infinite;
     }
-
     @keyframes snowFall {
-      0% {
-        transform: translateY(-10vh);
-      }
-      100% {
-        transform: translateY(110vh);
-      }
+      0%   { transform: translateY(-10vh); }
+      100% { transform: translateY(110vh); }
     }
 
     @media (max-width: 600px) {
-      .scene {
-        padding: 24px 12px 32px;
-      }
-      h1 {
-        font-size: 14px;
-      }
-      .countdown {
-        font-size: 12px;
+      .scene { padding: 24px 12px 32px; }
+      h1 { font-size: 14px; }
+      .countdown { font-size: 12px; }
+      .speech {
+        max-width: 155px;
+        left: 24px;
       }
     }
   </style>
 </head>
 <body>
   <h1 id="headline">DAYS REMAIN</h1>
-  <p class="subtitle">From <span style="color:#ffd15c;">Germany</span> to <span style="color:#ffd15c;">Finland</span> &mdash; keep running.</p>
+  <p class="subtitle">
+    From <span>Germany</span> to <span>Finland</span> &mdash; through snow, mushrooms and chaos.
+  </p>
+
+  <div class="stats">
+    <div class="stat-pill">Days passed: <span id="daysPassed">0</span></div>
+    <div class="stat-pill">Total days: <span id="daysTotal">0</span></div>
+    <div class="stat-pill">Progress: <span id="percentDone">0%</span></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-labels">
+      <span>🇩🇪 Start</span>
+      <span>🇫🇮 Goal</span>
+    </div>
+    <div class="progress-bar">
+      <div id="progressFill" class="progress-fill"></div>
+      <div class="progress-marker" style="left: 25%;"></div>
+      <div class="progress-marker" style="left: 50%;"></div>
+      <div class="progress-marker" style="left: 75%;"></div>
+    </div>
+  </div>
 
   <div class="scene">
+    <div class="aurora"></div>
+
     <div class="time-label">
       Start: <span>31.05.2025</span> &nbsp;|&nbsp;
       Goal: <span>15.01.2026 &bull; 17:00</span>
@@ -600,24 +846,44 @@
 
     <div class="track-wrapper">
       <div id="track" class="track">
+        <div class="clouds"></div>
+        <div class="mountains"></div>
+        <div class="forest"></div>
+        <div class="stars">
+          <div class="star one"></div>
+          <div class="star two big"></div>
+          <div class="star three"></div>
+          <div class="star four big"></div>
+        </div>
+
+        <!-- Sun & moon -->
+        <div id="sun" class="orb sun"></div>
+        <div id="moon" class="orb moon"></div>
+
         <div class="ground"></div>
 
         <!-- Decorations -->
         <div class="decor decor-left">
           <div class="mushroom"></div>
+          <div class="mushroom small blue"></div>
+          <div class="mushroom small purple"></div>
+          <div class="plant"></div>
+        </div>
+        <div class="decor decor-right">
+          <div class="mushroom blue"></div>
           <div class="mushroom small"></div>
           <div class="plant"></div>
         </div>
 
-        <div class="decor decor-right">
-          <div class="mushroom"></div>
-          <div class="plant"></div>
-        </div>
+        <div class="sparkle one"></div>
+        <div class="sparkle two"></div>
+        <div class="sparkle three"></div>
 
         <!-- Flags -->
         <div class="flag flag-de flag-start" title="Start – Germany"></div>
+        <div class="flag flag-fi flag-end" title="Goal – Finland"></div>
 
-        <!-- Runner (pixel-art you) -->
+        <!-- Runner -->
         <div id="runner" class="runner">
           <div class="runner-part runner-hair"></div>
           <div class="runner-part runner-head"></div>
@@ -629,6 +895,11 @@
           <div class="runner-part runner-leg runner-leg-right"></div>
         </div>
 
+        <!-- Speech bubble -->
+        <div id="speech" class="speech">
+          Loading thoughts...
+        </div>
+
         <!-- Goal -->
         <div id="goal" class="goal">
           <div class="goal-pole"></div>
@@ -636,7 +907,19 @@
           <div class="goal-date">15.01.26<br>17:00</div>
         </div>
 
-        <div class="flag flag-fi flag-end" title="Goal – Finland"></div>
+        <!-- Milestones -->
+        <div id="ms25" class="milestone">
+          <div class="milestone-sign">25%</div>
+          <div class="milestone-pole"></div>
+        </div>
+        <div id="ms50" class="milestone">
+          <div class="milestone-sign">50%</div>
+          <div class="milestone-pole"></div>
+        </div>
+        <div id="ms75" class="milestone">
+          <div class="milestone-sign">75%</div>
+          <div class="milestone-pole"></div>
+        </div>
       </div>
     </div>
 
@@ -648,38 +931,72 @@
   <!-- Snow overlay -->
   <div id="snow"></div>
 
-  <!-- Tiny Undertale-ish heart -->
+  <!-- Tiny heart -->
   <div class="heart" title="Stay determined."></div>
 
   <script>
     // Target and start times in local time
     const target = new Date(2026, 0, 15, 17, 0, 0);  // 15 Jan 2026 17:00
     const start  = new Date(2025, 4, 31, 0, 0, 0);   // 31 May 2025
-
-    const countdownEl = document.getElementById("countdown");
-    const runnerEl = document.getElementById("runner");
-    const trackEl = document.getElementById("track");
-    const goalEl = document.getElementById("goal");
-    const footerText = document.getElementById("footerText");
-    const headline = document.getElementById("headline");
-
+    const dayMs  = 1000 * 60 * 60 * 24;
     const totalDuration = target.getTime() - start.getTime();
+    const totalDays = Math.round(totalDuration / dayMs);
+
+    // DOM refs
+    const countdownEl   = document.getElementById("countdown");
+    const runnerEl      = document.getElementById("runner");
+    const trackEl       = document.getElementById("track");
+    const goalEl        = document.getElementById("goal");
+    const footerText    = document.getElementById("footerText");
+    const headline      = document.getElementById("headline");
+    const speechEl      = document.getElementById("speech");
+    const daysPassedEl  = document.getElementById("daysPassed");
+    const daysTotalEl   = document.getElementById("daysTotal");
+    const percentDoneEl = document.getElementById("percentDone");
+    const progressFill  = document.getElementById("progressFill");
+    const ms25          = document.getElementById("ms25");
+    const ms50          = document.getElementById("ms50");
+    const ms75          = document.getElementById("ms75");
+    const sunEl         = document.getElementById("sun");
+    const moonEl        = document.getElementById("moon");
+    const auroraEl      = document.querySelector(".aurora");
+
+    daysTotalEl.textContent = totalDays;
 
     function pad(num) {
       return String(num).padStart(2, "0");
     }
 
+    function getSpeech(progressPercent, daysLeft) {
+      if (daysLeft <= 0) {
+        return "Arrived in the snow kingdom. Time for coffee and pulla.";
+      }
+      if (progressPercent < 10) {
+        return "Packing boxes, losing socks, doubting life choices.";
+      } else if (progressPercent < 30) {
+        return "Somewhere between paperwork and panic. Legs still fresh.";
+      } else if (progressPercent < 50) {
+        return "Halfway through the chaos mushrooms. Still running.";
+      } else if (progressPercent < 70) {
+        return "Germany fading behind, Finland getting louder.";
+      } else if (progressPercent < 90) {
+        return "I can already feel the -20°C on my face.";
+      } else {
+        return "Last stretch. Don't trip on the mushrooms now.";
+      }
+    }
+
     function update() {
       const now = new Date();
-      let diff = target.getTime() - now.getTime();
+      let diff  = target.getTime() - now.getTime();
       if (diff < 0) diff = 0;
 
       const seconds = Math.floor(diff / 1000) % 60;
       const minutes = Math.floor(diff / (1000 * 60)) % 60;
       const hours   = Math.floor(diff / (1000 * 60 * 60)) % 24;
-      const days    = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const days    = Math.floor(diff / dayMs);
 
-      // Dynamic headline like Majora's Mask: "X DAYS REMAIN"
+      // Headline like Majora's Mask
       headline.textContent = `${days} DAYS REMAIN`;
 
       if (diff > 0) {
@@ -694,32 +1011,88 @@
           `* <span>You did it.</span> Thank you for staying determined.`;
       }
 
-      // Runner position along the track
-      const nowClamped = Math.min(Math.max(now.getTime(), start.getTime()), target.getTime());
-      const elapsed = nowClamped - start.getTime();
-      const ratio = totalDuration > 0 ? elapsed / totalDuration : 1; // 0 → 1
+      // Progress stats
+      const nowClamped  = Math.min(Math.max(now.getTime(), start.getTime()), target.getTime());
+      const elapsed     = nowClamped - start.getTime();
+      const daysPassed  = Math.round(elapsed / dayMs);
+      const progressRatio   = totalDuration > 0 ? elapsed / totalDuration : 1;
+      const progressPercent = Math.round(progressRatio * 100);
 
-      const trackWidth = trackEl.clientWidth;
-      const runnerWidth = 26;
+      daysPassedEl.textContent  = daysPassed;
+      percentDoneEl.textContent = progressPercent + "%";
+      progressFill.style.width  = progressPercent + "%";
+
+      // Runner position
+      const trackWidth    = trackEl.clientWidth;
+      const runnerWidth   = 26;
       const goalRightMargin = 70;
-      const startX = 20;
-      const endX = trackWidth - goalRightMargin - runnerWidth;
-      const x = startX + (endX - startX) * ratio;
-
+      const startX        = 20;
+      const endX          = trackWidth - goalRightMargin - runnerWidth;
+      const x             = startX + (endX - startX) * progressRatio;
       runnerEl.style.left = `${Math.max(startX, Math.min(endX, x))}px`;
 
-      // Slightly scale the goal as you get closer
-      const goalScale = 0.9 + 0.3 * ratio;
+      // Goal scale
+      const goalScale = 0.9 + 0.3 * progressRatio;
       goalEl.style.transform = `scale(${goalScale})`;
+
+      // Speech bubble
+      speechEl.textContent = getSpeech(progressPercent, days);
+
+      // Place milestones (fixed at 25/50/75%)
+      function placeMilestone(el, p) {
+        const xPos = startX + (endX - startX) * (p / 100);
+        el.style.left = `${xPos}px`;
+      }
+      placeMilestone(ms25, 25);
+      placeMilestone(ms50, 50);
+      placeMilestone(ms75, 75);
+
+      // Glow near finish
+      if (progressPercent >= 90 && diff > 0) {
+        runnerEl.style.filter = "drop-shadow(0 0 4px rgba(255,255,255,0.9))";
+      } else {
+        runnerEl.style.filter = "none";
+      }
+
+      // Sun / moon / aurora cycle
+      const hourFloat = now.getHours() + now.getMinutes() / 60;
+      const dayPhase  = hourFloat / 24; // 0..1
+
+      const trackRect = trackEl.getBoundingClientRect();
+      const skyHeight = 60; // approximate vertical play area for orbs
+
+      // position along width in %
+      const sunXPercent  = 10 + 80 * dayPhase;
+      const moonXPercent = 10 + 80 * ((dayPhase + 0.5) % 1);
+
+      const sunY = 20 - Math.sin(dayPhase * Math.PI) * 18;     // high at midday
+      const moonY = 24 - Math.sin(((dayPhase + 0.5) % 1) * Math.PI) * 18;
+
+      sunEl.style.left  = sunXPercent + "%";
+      sunEl.style.top   = sunY + "px";
+
+      moonEl.style.left = moonXPercent + "%";
+      moonEl.style.top  = moonY + "px";
+
+      const dayWeight  = Math.max(0, Math.sin(dayPhase * Math.PI)); // 0 at midnight, 1 at noon
+      const nightWeight = 1 - dayWeight;
+
+      sunEl.style.opacity  = 0.1 + 0.9 * dayWeight;
+      moonEl.style.opacity = 0.2 + 0.8 * nightWeight;
+
+      // aurora stronger at night
+      if (auroraEl) {
+        auroraEl.style.opacity = 0.2 + 0.6 * nightWeight;
+      }
     }
 
     update();
     setInterval(update, 1000);
 
-    // === SNOW CREATION ===
+    // Snow
     (function createSnow() {
       const snowContainer = document.getElementById("snow");
-      const flakes = 90;
+      const flakes = 110;
       for (let i = 0; i < flakes; i++) {
         const span = document.createElement("span");
         span.className = "snowflake";
@@ -729,6 +1102,7 @@
         span.style.left = Math.random() * 100 + "vw";
         span.style.animationDuration = 6 + Math.random() * 8 + "s";
         span.style.animationDelay = Math.random() * 8 + "s";
+        span.style.opacity = 0.4 + Math.random() * 0.6;
         snowContainer.appendChild(span);
       }
     })();
