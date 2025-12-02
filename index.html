@@ -1,1111 +1,1395 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>DE ➜ FI Countdown Run</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
+    <title>DE ➜ FI Countdown Run</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Pixel font -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <!-- Pixel font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
-  <style>
-    :root {
-      --bg: #050608;
-      --fg: #f8f8f8;
-      --accent: #ffd15c;
-      --accent2: #3a3f4d;
-      --accent2-light: #d6d7df;
-      --line: #2a2a33;
-      --snow: rgba(255,255,255,0.9);
-      --aurora1: #4be3ff;
-      --aurora2: #9bff76;
-      --aurora3: #ffb7ff;
-    }
+    <style>
+        :root {
+            --bg: #050608;
+            --fg: #f8f8f8;
+            --accent: #ffd15c;
+            --accent2: #3a3f4d;
+            --accent2-light: #d6d7df;
+            --line: #2a2a33;
+            --snow: rgba(255, 255, 255, 0.9);
+            --aurora1: #4be3ff;
+            --aurora2: #9bff76;
+            --aurora3: #ffb7ff;
+        }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    body {
-      background: radial-gradient(circle at top, #141625 0, #050608 55%);
-      color: var(--fg);
-      font-family: "Press Start 2P", system-ui, -apple-system, BlinkMacSystemFont,
-                   "Segoe UI", sans-serif;
-      text-align: center;
-      padding: 24px 10px 40px;
-      overflow-x: hidden;
-    }
+        body {
+            background: radial-gradient(circle at top, #141625 0, #050608 55%);
+            color: var(--fg);
+            font-family: "Press Start 2P", system-ui, -apple-system, BlinkMacSystemFont,
+                "Segoe UI", sans-serif;
+            text-align: center;
+            padding: 24px 10px 40px;
+            overflow-x: hidden;
+        }
 
-    h1 {
-      font-size: 16px;
-      margin-bottom: 12px;
-      text-shadow: 0 0 4px #000;
-    }
+        h1 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            text-shadow: 0 0 4px #000;
+        }
 
-    .subtitle {
-      font-size: 10px;
-      opacity: 0.8;
-      margin-bottom: 16px;
-    }
-    .subtitle span {
-      color: var(--accent);
-    }
+        .subtitle {
+            font-size: 10px;
+            opacity: 0.8;
+            margin-bottom: 16px;
+        }
 
-    /* stats bar */
-    .stats {
-      max-width: 820px;
-      margin: 0 auto 10px;
-      font-size: 8px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      opacity: 0.9;
-    }
-    .stat-pill {
-      padding: 4px 6px;
-      border-radius: 999px;
-      background: rgba(0,0,0,0.6);
-      border: 1px solid rgba(255,255,255,0.15);
-    }
-    .stat-pill span {
-      color: var(--accent);
-    }
+        .subtitle span {
+            color: var(--accent);
+        }
 
-    /* progress bar */
-    .progress-wrap {
-      max-width: 820px;
-      margin: 0 auto 14px;
-      font-size: 8px;
-    }
-    .progress-labels {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 2px;
-      opacity: 0.8;
-    }
-    .progress-bar {
-      position: relative;
-      height: 10px;
-      border-radius: 999px;
-      overflow: hidden;
-      background: #111621;
-      box-shadow: 0 0 0 2px #000;
-    }
-    .progress-fill {
-      position: absolute;
-      inset: 0;
-      width: 0%;
-      background: linear-gradient(90deg, #ff4b6a, #ffd15c, #7ad990, #4be3ff, #c68fff);
-      box-shadow: 0 0 10px rgba(255,255,255,0.4);
-      transition: width 0.6s ease-out;
-    }
-    .progress-marker {
-      position: absolute;
-      top: -2px;
-      width: 2px;
-      height: 14px;
-      background: rgba(255,255,255,0.4);
-    }
-    .progress-marker::after {
-      content: "";
-      position: absolute;
-      top: -4px;
-      left: -2px;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.8);
-    }
+        /* stats bar */
+        .stats {
+            max-width: 820px;
+            margin: 0 auto 10px;
+            font-size: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            opacity: 0.9;
+        }
 
-    .scene {
-      max-width: 820px;
-      margin: 0 auto;
-      border: 4px solid var(--fg);
-      background:
-        radial-gradient(circle at top, #252a44 0, #151725 50%, #0b0d13 100%);
-      padding: 32px 24px 40px;
-      position: relative;
-      overflow: hidden;
-    }
+        .stat-pill {
+            padding: 4px 6px;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
 
-    .scene::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 15% 0, rgba(255,255,255,0.25) 0, transparent 40%),
-        radial-gradient(circle at 85% 0, rgba(255,255,255,0.15) 0, transparent 45%);
-      opacity: 0.2;
-      mix-blend-mode: screen;
-      pointer-events: none;
-      z-index: 0;
-    }
+        .stat-pill span {
+            color: var(--accent);
+        }
 
-    .aurora {
-      position: absolute;
-      top: 0;
-      left: -15%;
-      width: 130%;
-      height: 100px;
-      background:
-        radial-gradient(circle at 0% 80%, transparent 0, transparent 35%, rgba(0,0,0,0.8) 80%),
-        linear-gradient(120deg, var(--aurora1), var(--aurora2), var(--aurora3));
-      opacity: 0.4;
-      mix-blend-mode: screen;
-      filter: blur(4px);
-      animation: auroraDrift 18s ease-in-out infinite alternate;
-      z-index: 0;
-    }
+        /* progress bar */
+        .progress-wrap {
+            max-width: 820px;
+            margin: 0 auto 14px;
+            font-size: 8px;
+        }
 
-    @keyframes auroraDrift {
-      0%   { transform: translateX(0) translateY(0); }
-      50%  { transform: translateX(-5%) translateY(4px); }
-      100% { transform: translateX(5%) translateY(-4px); }
-    }
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2px;
+            opacity: 0.8;
+        }
 
-    .time-label {
-      position: relative;
-      font-size: 10px;
-      margin-bottom: 16px;
-      z-index: 1;
-    }
-    .time-label span {
-      color: var(--accent);
-    }
+        .progress-bar {
+            position: relative;
+            height: 10px;
+            border-radius: 999px;
+            overflow: hidden;
+            background: #111621;
+            box-shadow: 0 0 0 2px #000;
+        }
 
-    .countdown {
-      position: relative;
-      font-size: 14px;
-      margin-bottom: 18px;
-      z-index: 1;
-      text-shadow: 0 0 4px #000;
-    }
-    .countdown small {
-      display: block;
-      font-size: 9px;
-      opacity: 0.8;
-      margin-top: 6px;
-    }
+        .progress-fill {
+            position: absolute;
+            inset: 0;
+            width: 0%;
+            background: linear-gradient(90deg, #ff4b6a, #ffd15c, #7ad990, #4be3ff, #c68fff);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+            transition: width 0.6s ease-out;
+        }
 
-    .track-wrapper {
-      position: relative;
-      z-index: 1;
-      padding: 18px 8px 10px;
-    }
+        .progress-marker {
+            position: absolute;
+            top: -2px;
+            width: 2px;
+            height: 14px;
+            background: rgba(255, 255, 255, 0.4);
+        }
 
-    .track {
-      position: relative;
-      height: 150px;
-      border-top: 3px solid var(--line);
-      border-bottom: 3px solid var(--line);
-      background:
-        linear-gradient(to top, #050811 0, #0c101f 50%, #151a2c 100%);
-      box-shadow: 0 0 0 3px #000 inset;
-      overflow: hidden;
-    }
+        .progress-marker::after {
+            content: "";
+            position: absolute;
+            top: -4px;
+            left: -2px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+        }
 
-    /* mountains parallax layer */
-    .mountains {
-      position: absolute;
-      inset: 28px 0 auto 0;
-      height: 70px;
-      background:
-        linear-gradient(135deg, transparent 60%, #101320 61% 100%) 0 0 / 120px 70px repeat-x,
-        linear-gradient(-135deg, transparent 60%, #141729 61% 100%) 60px 0 / 140px 80px repeat-x;
-      opacity: 0.8;
-      transform: translateX(0);
-      animation: mountainsDrift 40s linear infinite;
-      pointer-events: none;
-      z-index: 0;
-    }
-    @keyframes mountainsDrift {
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-80px); }
-    }
+        .scene {
+            max-width: 820px;
+            margin: 0 auto;
+            border: 4px solid var(--fg);
+            background:
+                radial-gradient(circle at top, #252a44 0, #151725 50%, #0b0d13 100%);
+            padding: 32px 24px 40px;
+            position: relative;
+            overflow: hidden;
+        }
 
-    /* forest silhouettes */
-    .forest {
-      position: absolute;
-      inset: 65px 0 auto 0;
-      height: 50px;
-      background:
-        linear-gradient(to top, #060911 0, #101624 40%, transparent 100%);
-      box-shadow:
-        10px 0 0 #101624,
-        40px 0 0 #13182a,
-        70px 0 0 #101624,
-        110px 0 0 #141a2c,
-        160px 0 0 #101624;
-      opacity: 0.8;
-      filter: blur(0.5px);
-      animation: forestDrift 28s linear infinite;
-      pointer-events: none;
-      z-index: 0;
-    }
-    @keyframes forestDrift {
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-60px); }
-    }
+        .scene::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 15% 0, rgba(255, 255, 255, 0.25) 0, transparent 40%),
+                radial-gradient(circle at 85% 0, rgba(255, 255, 255, 0.15) 0, transparent 45%);
+            opacity: 0.2;
+            mix-blend-mode: screen;
+            pointer-events: none;
+            z-index: 0;
+        }
 
-    /* moving clouds */
-    .clouds {
-      position: absolute;
-      inset: 10px 0 auto 0;
-      height: 32px;
-      background:
-        radial-gradient(circle at 20% 50%, rgba(255,255,255,0.45) 0, transparent 50%),
-        radial-gradient(circle at 60% 40%, rgba(255,255,255,0.35) 0, transparent 55%),
-        radial-gradient(circle at 90% 55%, rgba(255,255,255,0.35) 0, transparent 50%);
-      filter: blur(1px);
-      opacity: 0.4;
-      animation: cloudsDrift 50s linear infinite;
-      pointer-events: none;
-      z-index: 0;
-    }
-    @keyframes cloudsDrift {
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-120px); }
-    }
+        .aurora {
+            position: absolute;
+            top: 0;
+            left: -15%;
+            width: 130%;
+            height: 100px;
+            background:
+                radial-gradient(circle at 0% 80%, transparent 0, transparent 35%, rgba(0, 0, 0, 0.8) 80%),
+                linear-gradient(120deg, var(--aurora1), var(--aurora2), var(--aurora3));
+            opacity: 0.4;
+            mix-blend-mode: screen;
+            filter: blur(4px);
+            animation: auroraDrift 18s ease-in-out infinite alternate;
+            z-index: 0;
+        }
 
-    /* stars */
-    .stars {
-      position: absolute;
-      inset: 4px 0 auto 0;
-      height: 40px;
-      pointer-events: none;
-      z-index: 0;
-    }
-    .star {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: #fffbe8;
-      border-radius: 50%;
-      opacity: 0.4;
-      animation: starTwinkle 3s ease-in-out infinite;
-    }
-    .star.big {
-      width: 3px;
-      height: 3px;
-      opacity: 0.7;
-    }
-    .star.one { left: 10%; top: 6px; animation-delay: 0.3s; }
-    .star.two { left: 35%; top: 14px; animation-delay: 1.2s; }
-    .star.three { left: 60%; top: 8px; animation-delay: 0.8s; }
-    .star.four { left: 80%; top: 18px; animation-delay: 2.0s; }
-    @keyframes starTwinkle {
-      0%, 100% { opacity: 0.2; transform: scale(0.6); }
-      50% { opacity: 1; transform: scale(1); }
-    }
+        @keyframes auroraDrift {
+            0% {
+                transform: translateX(0) translateY(0);
+            }
 
-    .ground {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 45px;
-      background:
-        linear-gradient(to top, #1b2133 0, #20263a 40%, #293046 100%);
-      border-top: 3px solid #000;
-      z-index: 1;
-    }
-    .ground::before {
-      content: "";
-      position: absolute;
-      inset: -4px -8px auto;
-      height: 20px;
-      background:
-        repeating-linear-gradient(
-          to right,
-          rgba(255,255,255,0.95) 0,
-          rgba(255,255,255,0.95) 6px,
-          rgba(220,230,255,0.9) 6px,
-          rgba(220,230,255,0.9) 12px
-        );
-      opacity: 0.95;
-      box-shadow: 0 0 0 2px rgba(0,0,0,0.6);
-    }
+            50% {
+                transform: translateX(-5%) translateY(4px);
+            }
 
-    /* sun & moon */
-    .orb {
-      position: absolute;
-      top: 8px;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      filter: blur(0.3px);
-      pointer-events: none;
-      z-index: 1;
-      box-shadow: 0 0 10px rgba(255,255,255,0.8);
-    }
-    .sun {
-      background: radial-gradient(circle, #ffe38a 0, #ffae00 50%, #ff7a00 100%);
-      opacity: 0.0;
-    }
-    .moon {
-      background: radial-gradient(circle, #ffffff 0, #d0d8ff 50%, #8a93c7 100%);
-      box-shadow: 0 0 10px rgba(200,220,255,0.9);
-      opacity: 0.0;
-    }
+            100% {
+                transform: translateX(5%) translateY(-4px);
+            }
+        }
 
-    /* DECOR: mushrooms & plants */
-    .decor {
-      position: absolute;
-      bottom: 34px;
-      display: flex;
-      gap: 12px;
-      align-items: flex-end;
-      pointer-events: none;
-      z-index: 2;
-    }
-    .decor-left { left: 14px; }
-    .decor-right { right: 80px; }
+        .time-label {
+            position: relative;
+            font-size: 10px;
+            margin-bottom: 16px;
+            z-index: 1;
+        }
 
-    .mushroom,
-    .plant {
-      position: relative;
-      image-rendering: pixelated;
-      animation: decorBob 2.6s ease-in-out infinite;
-    }
-    @keyframes decorBob {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-1px); }
-    }
+        .time-label span {
+            color: var(--accent);
+        }
 
-    .mushroom::before {
-      content: "";
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      background: #e0d3ff; /* stem */
-      box-shadow:
-        0 4px #e0d3ff,
-        0 8px #e0d3ff;
-    }
-    .mushroom::after {
-      content: "";
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      background: #ff4b6a;
-      top: -4px;
-      left: -2px;
-      box-shadow:
-        4px 0 #ff4b6a,
-        8px 0 #ff4b6a,
-        12px 0 #ff4b6a;
-    }
-    .mushroom.blue::after {
-      background: #4be3ff;
-      box-shadow:
-        4px 0 #4be3ff,
-        8px 0 #4be3ff,
-        12px 0 #4be3ff;
-    }
-    .mushroom.purple::after {
-      background: #c68fff;
-      box-shadow:
-        4px 0 #c68fff,
-        8px 0 #c68fff,
-        12px 0 #c68fff;
-    }
+        .countdown {
+            position: relative;
+            font-size: 14px;
+            margin-bottom: 18px;
+            z-index: 1;
+            text-shadow: 0 0 4px #000;
+        }
 
-    .mushroom.small::before,
-    .mushroom.small::after {
-      transform: scale(0.8);
-    }
+        .countdown small {
+            display: block;
+            font-size: 9px;
+            opacity: 0.8;
+            margin-top: 6px;
+        }
 
-    .plant::before {
-      content: "";
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      background: #7ad990;
-      top: -2px;
-      left: 0;
-      box-shadow:
-        0 4px #7ad990,
-        0 8px #7ad990,
-        -4px 4px #7ad990,
-        4px 4px #7ad990,
-        -4px 8px #7ad990,
-        4px 8px #7ad990;
-    }
+        .track-wrapper {
+            position: relative;
+            z-index: 1;
+            padding: 18px 8px 10px;
+        }
 
-    /* sparkles */
-    .sparkle {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: #fffbe8;
-      border-radius: 50%;
-      animation: sparkleBlink 3s ease-in-out infinite;
-      opacity: 0.0;
-    }
-    .sparkle.one { left: 4px; bottom: 22px; animation-delay: 0.5s; }
-    .sparkle.two { left: 26px; bottom: 27px; animation-delay: 1.4s; }
-    .sparkle.three { right: 10px; bottom: 24px; animation-delay: 2.2s; }
+        .track {
+            position: relative;
+            height: 150px;
+            border-top: 3px solid var(--line);
+            border-bottom: 3px solid var(--line);
+            background:
+                linear-gradient(to top, #050811 0, #0c101f 50%, #151a2c 100%);
+            box-shadow: 0 0 0 3px #000 inset;
+            overflow: hidden;
+        }
 
-    @keyframes sparkleBlink {
-      0%, 80%, 100% { opacity: 0; transform: scale(0.3); }
-      85% { opacity: 1; transform: scale(1); }
-      90% { opacity: 0; transform: scale(0.4); }
-    }
+        /* mountains parallax layer */
+        .mountains {
+            position: absolute;
+            inset: 28px 0 auto 0;
+            height: 70px;
+            background:
+                linear-gradient(135deg, transparent 60%, #101320 61% 100%) 0 0 / 120px 70px repeat-x,
+                linear-gradient(-135deg, transparent 60%, #141729 61% 100%) 60px 0 / 140px 80px repeat-x;
+            opacity: 0.8;
+            transform: translateX(0);
+            animation: mountainsDrift 40s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
 
-    /* flags */
-    .flag {
-      position: absolute;
-      bottom: 80px;
-      width: 30px;
-      height: 18px;
-      box-shadow: 0 0 0 2px #000;
-      transform-origin: left center;
-      animation: flagWave 1.8s ease-in-out infinite;
-      z-index: 2;
-    }
-    .flag-start { left: 16px; }
-    .flag-end { right: 30px; }
+        @keyframes mountainsDrift {
+            0% {
+                transform: translateX(0);
+            }
 
-    @keyframes flagWave {
-      0%, 100% { transform: skewX(0deg); }
-      50% { transform: skewX(3deg); }
-    }
-    .flag-de {
-      background:
-        linear-gradient(
-          to bottom,
-          #000 0 33%,
-          #dd0000 33% 66%,
-          #ffce00 66% 100%
-        );
-    }
-    .flag-fi {
-      background: #ffffff;
-      position: absolute;
-    }
-    .flag-fi::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(
-          to right,
-          transparent 0 30%,
-          #003580 30% 45%,
-          transparent 45% 100%
-        ),
-        linear-gradient(
-          to bottom,
-          transparent 0 40%,
-          #003580 40% 60%,
-          transparent 60% 100%
-        );
-      opacity: 0.98;
-    }
+            100% {
+                transform: translateX(-80px);
+            }
+        }
 
-    /* runner (you) */
-    .runner {
-      position: absolute;
-      bottom: 43px;
-      left: 12px;
-      width: 26px;
-      height: 34px;
-      image-rendering: pixelated;
-      transform-origin: center bottom;
-      animation: runnerBob 0.42s infinite steps(2);
-      z-index: 3;
-    }
-    .runner-part {
-      position: absolute;
-      image-rendering: pixelated;
-    }
-    .runner-hair {
-      width: 4px;
-      height: 4px;
-      background: #2d2119;
-      top: -4px;
-      left: 6px;
-      box-shadow:
-        4px 0 #2d2119,
-        8px 0 #2d2119,
-        12px 0 #2d2119,
-        0 4px #2d2119,
-        4px 4px #2d2119,
-        8px 4px #2d2119;
-    }
-    .runner-head {
-      width: 4px;
-      height: 4px;
-      background: #f5d6b1;
-      top: 0;
-      left: 6px;
-      box-shadow:
-        4px 0 #f5d6b1,
-        8px 0 #f5d6b1,
-        12px 0 #f5d6b1,
-        0 4px #f5d6b1,
-        4px 4px #f5d6b1,
-        8px 4px #f5d6b1,
-        4px 8px #f5d6b1;
-    }
-    .runner-beard {
-      width: 4px;
-      height: 4px;
-      background: #2b1c14;
-      top: 8px;
-      left: 4px;
-      box-shadow:
-        4px 0 #2b1c14,
-        8px 0 #2b1c14,
-        12px 0 #2b1c14,
-        4px 4px #2b1c14,
-        8px 4px #2b1c14;
-    }
-    .runner-body {
-      width: 4px;
-      height: 4px;
-      background: var(--accent2);
-      top: 14px;
-      left: 4px;
-      box-shadow:
-        4px 0 var(--accent2),
-        8px 0 var(--accent2),
-        12px 0 var(--accent2),
-        16px 0 var(--accent2),
-        0 4px var(--accent2),
-        4px 4px var(--accent2),
-        8px 4px var(--accent2),
-        12px 4px var(--accent2),
-        16px 4px var(--accent2),
-        4px 8px var(--accent2),
-        8px 8px var(--accent2),
-        12px 8px var(--accent2),
-        4px 12px var(--accent2-light),
-        8px 12px var(--accent2-light),
-        12px 12px var(--accent2-light);
-    }
-    .runner-arm {
-      width: 4px;
-      height: 10px;
-      background: var(--accent2);
-      top: 16px;
-      transform-origin: top center;
-      animation: armRun 0.42s infinite ease-in-out;
-    }
-    .runner-arm-left { left: 2px; }
-    .runner-arm-right {
-      left: 18px;
-      animation-delay: 0.21s;
-    }
-    .runner-arm-right::after {
-      content: "";
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: #111;
-      bottom: 0;
-      right: 0;
-    }
-    .runner-leg {
-      width: 4px;
-      height: 11px;
-      background: #32384b;
-      bottom: 0;
-      transform-origin: top center;
-      box-shadow: 0 4px #32384b;
-      animation: legRun 0.42s infinite ease-in-out;
-    }
-    .runner-leg-left { left: 6px; }
-    .runner-leg-right {
-      left: 12px;
-      animation-delay: 0.21s;
-    }
+        /* forest silhouettes */
+        .forest {
+            position: absolute;
+            inset: 65px 0 auto 0;
+            height: 50px;
+            background:
+                linear-gradient(to top, #060911 0, #101624 40%, transparent 100%);
+            box-shadow:
+                10px 0 0 #101624,
+                40px 0 0 #13182a,
+                70px 0 0 #101624,
+                110px 0 0 #141a2c,
+                160px 0 0 #101624;
+            opacity: 0.8;
+            filter: blur(0.5px);
+            animation: forestDrift 28s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
 
-    @keyframes runnerBob {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(1px); }
-    }
-    @keyframes legRun {
-      0%, 100% { transform: rotate(18deg); }
-      50% { transform: rotate(-18deg); }
-    }
-    @keyframes armRun {
-      0%, 100% { transform: rotate(-18deg); }
-      50% { transform: rotate(18deg); }
-    }
+        @keyframes forestDrift {
+            0% {
+                transform: translateX(0);
+            }
 
-    /* speech bubble */
-    .speech {
-      position: absolute;
-      bottom: 88px;
-      left: 40px;
-      max-width: 190px;
-      font-size: 8px;
-      padding: 6px 8px;
-      background: rgba(0,0,0,0.8);
-      border-radius: 8px;
-      border: 2px solid rgba(255,255,255,0.5);
-      text-align: left;
-      z-index: 4;
-    }
-    .speech::after {
-      content: "";
-      position: absolute;
-      left: 8px;
-      bottom: -6px;
-      border-width: 6px 6px 0 6px;
-      border-style: solid;
-      border-color: rgba(0,0,0,0.8) transparent transparent transparent;
-    }
+            100% {
+                transform: translateX(-60px);
+            }
+        }
 
-    /* goal + milestones */
-    .goal {
-      position: absolute;
-      bottom: 43px;
-      right: 28px;
-      width: 46px;
-      height: 66px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      transform-origin: bottom center;
-      z-index: 3;
-    }
-    .goal-pole {
-      width: 4px;
-      height: 42px;
-      background: #c7b28a;
-      box-shadow: 0 0 0 2px #000;
-    }
-    .goal-flag {
-      width: 34px;
-      height: 20px;
-      background: var(--accent);
-      box-shadow: 0 0 0 2px #000;
-      position: relative;
-      clip-path: polygon(0 0, 100% 0, 70% 50%, 100% 100%, 0 100%);
-    }
-    .goal-date {
-      font-size: 8px;
-      text-align: center;
-      padding: 2px 4px;
-      background: #000;
-      border: 2px solid var(--accent);
-      box-shadow: 0 0 0 2px #000;
-    }
+        /* moving clouds */
+        .clouds {
+            position: absolute;
+            inset: 10px 0 auto 0;
+            height: 32px;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.45) 0, transparent 50%),
+                radial-gradient(circle at 60% 40%, rgba(255, 255, 255, 0.35) 0, transparent 55%),
+                radial-gradient(circle at 90% 55%, rgba(255, 255, 255, 0.35) 0, transparent 50%);
+            filter: blur(1px);
+            opacity: 0.4;
+            animation: cloudsDrift 50s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
 
-    .milestone {
-      position: absolute;
-      bottom: 45px;
-      width: 26px;
-      height: 38px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-size: 6px;
-      color: #fff;
-      z-index: 2;
-    }
-    .milestone-pole {
-      width: 3px;
-      height: 20px;
-      background: #c7b28a;
-      box-shadow: 0 0 0 2px #000;
-    }
-    .milestone-sign {
-      margin-bottom: 2px;
-      padding: 2px 3px;
-      background: #000;
-      border: 2px solid #fff;
-      box-shadow: 0 0 0 2px #000;
-      white-space: nowrap;
-    }
+        @keyframes cloudsDrift {
+            0% {
+                transform: translateX(0);
+            }
 
-    .footer-text {
-      margin-top: 18px;
-      font-size: 8px;
-      opacity: 0.8;
-      position: relative;
-      z-index: 1;
-    }
-    .footer-text span {
-      color: var(--accent);
-    }
+            100% {
+                transform: translateX(-120px);
+            }
+        }
 
-    /* undertale-ish heart */
-    .heart {
-      position: fixed;
-      right: 10px;
-      bottom: 8px;
-      width: 8px;
-      height: 8px;
-      image-rendering: pixelated;
-      opacity: 0.7;
-      animation: heartPulse 1.4s ease-in-out infinite;
-      pointer-events: none;
-    }
-    .heart::before {
-      content: "";
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      background: #ff2646;
-      box-shadow:
-        4px 0 #ff2646,
-        8px 0 #ff2646,
-        0 4px #ff2646,
-        4px 4px #ff2646,
-        8px 4px #ff2646,
-        4px 8px #ff2646;
-    }
-    @keyframes heartPulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.3); }
-    }
+        /* stars */
+        .stars {
+            position: absolute;
+            inset: 4px 0 auto 0;
+            height: 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
 
-    /* snow overlay */
-    #snow {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 10;
-    }
-    .snowflake {
-      position: absolute;
-      top: -10px;
-      width: 4px;
-      height: 4px;
-      background: var(--snow);
-      border-radius: 50%;
-      opacity: 0.9;
-      filter: blur(0.5px);
-      animation-name: snowFall;
-      animation-timing-function: linear;
-      animation-iteration-count: infinite;
-    }
-    @keyframes snowFall {
-      0%   { transform: translateY(-10vh); }
-      100% { transform: translateY(110vh); }
-    }
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fffbe8;
+            border-radius: 50%;
+            opacity: 0.4;
+            animation: starTwinkle 3s ease-in-out infinite;
+        }
 
-    @media (max-width: 600px) {
-      .scene { padding: 24px 12px 32px; }
-      h1 { font-size: 14px; }
-      .countdown { font-size: 12px; }
-      .speech {
-        max-width: 155px;
-        left: 24px;
-      }
-    }
-  </style>
+        .star.big {
+            width: 3px;
+            height: 3px;
+            opacity: 0.7;
+        }
+
+        .star.one {
+            left: 10%;
+            top: 6px;
+            animation-delay: 0.3s;
+        }
+
+        .star.two {
+            left: 35%;
+            top: 14px;
+            animation-delay: 1.2s;
+        }
+
+        .star.three {
+            left: 60%;
+            top: 8px;
+            animation-delay: 0.8s;
+        }
+
+        .star.four {
+            left: 80%;
+            top: 18px;
+            animation-delay: 2.0s;
+        }
+
+        @keyframes starTwinkle {
+
+            0%,
+            100% {
+                opacity: 0.2;
+                transform: scale(0.6);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .ground {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 45px;
+            background:
+                linear-gradient(to top, #1b2133 0, #20263a 40%, #293046 100%);
+            border-top: 3px solid #000;
+            z-index: 1;
+        }
+
+        .ground::before {
+            content: "";
+            position: absolute;
+            inset: -4px -8px auto;
+            height: 20px;
+            background:
+                repeating-linear-gradient(to right,
+                    rgba(255, 255, 255, 0.95) 0,
+                    rgba(255, 255, 255, 0.95) 6px,
+                    rgba(220, 230, 255, 0.9) 6px,
+                    rgba(220, 230, 255, 0.9) 12px);
+            opacity: 0.95;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.6);
+        }
+
+        /* sun & moon */
+        .orb {
+            position: absolute;
+            top: 8px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            filter: blur(0.3px);
+            pointer-events: none;
+            z-index: 1;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        .sun {
+            background: radial-gradient(circle, #ffe38a 0, #ffae00 50%, #ff7a00 100%);
+            opacity: 0.0;
+        }
+
+        .moon {
+            background: radial-gradient(circle, #ffffff 0, #d0d8ff 50%, #8a93c7 100%);
+            box-shadow: 0 0 10px rgba(200, 220, 255, 0.9);
+            opacity: 0.0;
+        }
+
+        /* DECOR: mushrooms & plants */
+        .decor {
+            position: absolute;
+            bottom: 34px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .decor-left {
+            left: 14px;
+        }
+
+        .decor-right {
+            right: 80px;
+        }
+
+        .mushroom,
+        .plant {
+            position: relative;
+            image-rendering: pixelated;
+            animation: decorBob 2.6s ease-in-out infinite;
+        }
+
+        @keyframes decorBob {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-1px);
+            }
+        }
+
+        .mushroom::before {
+            content: "";
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #e0d3ff;
+            /* stem */
+            box-shadow:
+                0 4px #e0d3ff,
+                0 8px #e0d3ff;
+        }
+
+        .mushroom::after {
+            content: "";
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ff4b6a;
+            top: -4px;
+            left: -2px;
+            box-shadow:
+                4px 0 #ff4b6a,
+                8px 0 #ff4b6a,
+                12px 0 #ff4b6a;
+        }
+
+        .mushroom.blue::after {
+            background: #4be3ff;
+            box-shadow:
+                4px 0 #4be3ff,
+                8px 0 #4be3ff,
+                12px 0 #4be3ff;
+        }
+
+        .mushroom.purple::after {
+            background: #c68fff;
+            box-shadow:
+                4px 0 #c68fff,
+                8px 0 #c68fff,
+                12px 0 #c68fff;
+        }
+
+        .mushroom.small::before,
+        .mushroom.small::after {
+            transform: scale(0.8);
+        }
+
+        .plant::before {
+            content: "";
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #7ad990;
+            top: -2px;
+            left: 0;
+            box-shadow:
+                0 4px #7ad990,
+                0 8px #7ad990,
+                -4px 4px #7ad990,
+                4px 4px #7ad990,
+                -4px 8px #7ad990,
+                4px 8px #7ad990;
+        }
+
+        /* sparkles */
+        .sparkle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fffbe8;
+            border-radius: 50%;
+            animation: sparkleBlink 3s ease-in-out infinite;
+            opacity: 0.0;
+        }
+
+        .sparkle.one {
+            left: 4px;
+            bottom: 22px;
+            animation-delay: 0.5s;
+        }
+
+        .sparkle.two {
+            left: 26px;
+            bottom: 27px;
+            animation-delay: 1.4s;
+        }
+
+        .sparkle.three {
+            right: 10px;
+            bottom: 24px;
+            animation-delay: 2.2s;
+        }
+
+        @keyframes sparkleBlink {
+
+            0%,
+            80%,
+            100% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+
+            85% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            90% {
+                opacity: 0;
+                transform: scale(0.4);
+            }
+        }
+
+        /* flags */
+        .flag {
+            position: absolute;
+            bottom: 80px;
+            width: 30px;
+            height: 18px;
+            box-shadow: 0 0 0 2px #000;
+            transform-origin: left center;
+            animation: flagWave 1.8s ease-in-out infinite;
+            z-index: 2;
+        }
+
+        .flag-start {
+            left: 16px;
+        }
+
+        .flag-end {
+            right: 30px;
+        }
+
+        @keyframes flagWave {
+
+            0%,
+            100% {
+                transform: skewX(0deg);
+            }
+
+            50% {
+                transform: skewX(3deg);
+            }
+        }
+
+        .flag-de {
+            background:
+                linear-gradient(to bottom,
+                    #000 0 33%,
+                    #dd0000 33% 66%,
+                    #ffce00 66% 100%);
+        }
+
+        .flag-fi {
+            background: #ffffff;
+            position: absolute;
+        }
+
+        .flag-fi::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(to right,
+                    transparent 0 30%,
+                    #003580 30% 45%,
+                    transparent 45% 100%),
+                linear-gradient(to bottom,
+                    transparent 0 40%,
+                    #003580 40% 60%,
+                    transparent 60% 100%);
+            opacity: 0.98;
+        }
+
+        /* runner (you) */
+        .runner {
+            position: absolute;
+            bottom: 43px;
+            left: 12px;
+            width: 26px;
+            height: 34px;
+            image-rendering: pixelated;
+            transform-origin: center bottom;
+            animation: runnerBob 0.42s infinite steps(2);
+            z-index: 3;
+        }
+
+        .runner-part {
+            position: absolute;
+            image-rendering: pixelated;
+        }
+
+        .runner-hair {
+            width: 4px;
+            height: 4px;
+            background: #2d2119;
+            top: -4px;
+            left: 6px;
+            box-shadow:
+                4px 0 #2d2119,
+                8px 0 #2d2119,
+                12px 0 #2d2119,
+                0 4px #2d2119,
+                4px 4px #2d2119,
+                8px 4px #2d2119;
+        }
+
+        .runner-head {
+            width: 4px;
+            height: 4px;
+            background: #f5d6b1;
+            top: 0;
+            left: 6px;
+            box-shadow:
+                4px 0 #f5d6b1,
+                8px 0 #f5d6b1,
+                12px 0 #f5d6b1,
+                0 4px #f5d6b1,
+                4px 4px #f5d6b1,
+                8px 4px #f5d6b1,
+                4px 8px #f5d6b1;
+        }
+
+        .runner-beard {
+            width: 4px;
+            height: 4px;
+            background: #2b1c14;
+            top: 8px;
+            left: 4px;
+            box-shadow:
+                4px 0 #2b1c14,
+                8px 0 #2b1c14,
+                12px 0 #2b1c14,
+                4px 4px #2b1c14,
+                8px 4px #2b1c14;
+        }
+
+        .runner-body {
+            width: 4px;
+            height: 4px;
+            background: var(--accent2);
+            top: 14px;
+            left: 4px;
+            box-shadow:
+                4px 0 var(--accent2),
+                8px 0 var(--accent2),
+                12px 0 var(--accent2),
+                16px 0 var(--accent2),
+                0 4px var(--accent2),
+                4px 4px var(--accent2),
+                8px 4px var(--accent2),
+                12px 4px var(--accent2),
+                16px 4px var(--accent2),
+                4px 8px var(--accent2),
+                8px 8px var(--accent2),
+                12px 8px var(--accent2),
+                4px 12px var(--accent2-light),
+                8px 12px var(--accent2-light),
+                12px 12px var(--accent2-light);
+        }
+
+        .runner-arm {
+            width: 4px;
+            height: 10px;
+            background: var(--accent2);
+            top: 16px;
+            transform-origin: top center;
+            animation: armRun 0.42s infinite ease-in-out;
+        }
+
+        .runner-arm-left {
+            left: 2px;
+        }
+
+        .runner-arm-right {
+            left: 18px;
+            animation-delay: 0.21s;
+        }
+
+        .runner-arm-right::after {
+            content: "";
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #111;
+            bottom: 0;
+            right: 0;
+        }
+
+        .runner-leg {
+            width: 4px;
+            height: 11px;
+            background: #32384b;
+            bottom: 0;
+            transform-origin: top center;
+            box-shadow: 0 4px #32384b;
+            animation: legRun 0.42s infinite ease-in-out;
+        }
+
+        .runner-leg-left {
+            left: 6px;
+        }
+
+        .runner-leg-right {
+            left: 12px;
+            animation-delay: 0.21s;
+        }
+
+        @keyframes runnerBob {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(1px);
+            }
+        }
+
+        @keyframes legRun {
+
+            0%,
+            100% {
+                transform: rotate(18deg);
+            }
+
+            50% {
+                transform: rotate(-18deg);
+            }
+        }
+
+        @keyframes armRun {
+
+            0%,
+            100% {
+                transform: rotate(-18deg);
+            }
+
+            50% {
+                transform: rotate(18deg);
+            }
+        }
+
+        /* speech bubble */
+        .speech {
+            position: absolute;
+            bottom: 88px;
+            left: 40px;
+            max-width: 190px;
+            font-size: 8px;
+            padding: 6px 8px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            text-align: left;
+            z-index: 4;
+        }
+
+        .speech::after {
+            content: "";
+            position: absolute;
+            left: 8px;
+            bottom: -6px;
+            border-width: 6px 6px 0 6px;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+        }
+
+        /* goal + milestones */
+        .goal {
+            position: absolute;
+            bottom: 43px;
+            right: 28px;
+            width: 46px;
+            height: 66px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            transform-origin: bottom center;
+            z-index: 3;
+        }
+
+        .goal-pole {
+            width: 4px;
+            height: 42px;
+            background: #c7b28a;
+            box-shadow: 0 0 0 2px #000;
+        }
+
+        .goal-flag {
+            width: 34px;
+            height: 20px;
+            background: var(--accent);
+            box-shadow: 0 0 0 2px #000;
+            position: relative;
+            clip-path: polygon(0 0, 100% 0, 70% 50%, 100% 100%, 0 100%);
+        }
+
+        .goal-date {
+            font-size: 8px;
+            text-align: center;
+            padding: 2px 4px;
+            background: #000;
+            border: 2px solid var(--accent);
+            box-shadow: 0 0 0 2px #000;
+        }
+
+        .milestone {
+            position: absolute;
+            bottom: 45px;
+            width: 26px;
+            height: 38px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 6px;
+            color: #fff;
+            z-index: 2;
+        }
+
+        /* Music note toggle */
+        .music-toggle {
+            position: fixed;
+            top: 8px;
+            right: 8px;
+            z-index: 999;
+            font-size: 8px;
+            padding: 6px 8px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 6px;
+            box-shadow: 0 0 0 2px #000;
+            cursor: pointer;
+            user-select: none;
+            text-align: left;
+        }
+
+        .music-toggle span.state {
+            color: var(--accent);
+        }
+
+        .milestone-pole {
+            width: 3px;
+            height: 20px;
+            background: #c7b28a;
+            box-shadow: 0 0 0 2px #000;
+        }
+
+        .milestone-sign {
+            margin-bottom: 2px;
+            padding: 2px 3px;
+            background: #000;
+            border: 2px solid #fff;
+            box-shadow: 0 0 0 2px #000;
+            white-space: nowrap;
+        }
+
+        .footer-text {
+            margin-top: 18px;
+            font-size: 8px;
+            opacity: 0.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-text span {
+            color: var(--accent);
+        }
+
+        /* undertale-ish heart */
+        .heart {
+            position: fixed;
+            right: 10px;
+            bottom: 8px;
+            width: 8px;
+            height: 8px;
+            image-rendering: pixelated;
+            opacity: 0.7;
+            animation: heartPulse 1.4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .heart::before {
+            content: "";
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ff2646;
+            box-shadow:
+                4px 0 #ff2646,
+                8px 0 #ff2646,
+                0 4px #ff2646,
+                4px 4px #ff2646,
+                8px 4px #ff2646,
+                4px 8px #ff2646;
+        }
+
+        @keyframes heartPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.3);
+            }
+        }
+
+        /* snow overlay */
+        #snow {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            width: 4px;
+            height: 4px;
+            background: var(--snow);
+            border-radius: 50%;
+            opacity: 0.9;
+            filter: blur(0.5px);
+            animation-name: snowFall;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+
+        @keyframes snowFall {
+            0% {
+                transform: translateY(-10vh);
+            }
+
+            100% {
+                transform: translateY(110vh);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .scene {
+                padding: 24px 12px 32px;
+            }
+
+            h1 {
+                font-size: 14px;
+            }
+
+            .countdown {
+                font-size: 12px;
+            }
+
+            .speech {
+                max-width: 155px;
+                left: 24px;
+            }
+        }
+    </style>
 </head>
+
 <body>
-  <h1 id="headline">DAYS REMAIN</h1>
-  <p class="subtitle">
-    From <span>Germany</span> to <span>Finland</span> &mdash; through snow, mushrooms and chaos.
-  </p>
-
-  <div class="stats">
-    <div class="stat-pill">Days passed: <span id="daysPassed">0</span></div>
-    <div class="stat-pill">Total days: <span id="daysTotal">0</span></div>
-    <div class="stat-pill">Progress: <span id="percentDone">0%</span></div>
-  </div>
-
-  <div class="progress-wrap">
-    <div class="progress-labels">
-      <span>🇩🇪 Start</span>
-      <span>🇫🇮 Goal</span>
-    </div>
-    <div class="progress-bar">
-      <div id="progressFill" class="progress-fill"></div>
-      <div class="progress-marker" style="left: 25%;"></div>
-      <div class="progress-marker" style="left: 50%;"></div>
-      <div class="progress-marker" style="left: 75%;"></div>
-    </div>
-  </div>
-
-  <div class="scene">
-    <div class="aurora"></div>
-
-    <div class="time-label">
-      Start: <span>31.05.2025</span> &nbsp;|&nbsp;
-      Goal: <span>15.01.2026 &bull; 17:00</span>
-    </div>
-
-    <div id="countdown" class="countdown">
-      Loading countdown...
-      <small>Time left until you reach the goal.</small>
-    </div>
-
-    <div class="track-wrapper">
-      <div id="track" class="track">
-        <div class="clouds"></div>
-        <div class="mountains"></div>
-        <div class="forest"></div>
-        <div class="stars">
-          <div class="star one"></div>
-          <div class="star two big"></div>
-          <div class="star three"></div>
-          <div class="star four big"></div>
-        </div>
-
-        <!-- Sun & moon -->
-        <div id="sun" class="orb sun"></div>
-        <div id="moon" class="orb moon"></div>
-
-        <div class="ground"></div>
-
-        <!-- Decorations -->
-        <div class="decor decor-left">
-          <div class="mushroom"></div>
-          <div class="mushroom small blue"></div>
-          <div class="mushroom small purple"></div>
-          <div class="plant"></div>
-        </div>
-        <div class="decor decor-right">
-          <div class="mushroom blue"></div>
-          <div class="mushroom small"></div>
-          <div class="plant"></div>
-        </div>
-
-        <div class="sparkle one"></div>
-        <div class="sparkle two"></div>
-        <div class="sparkle three"></div>
-
-        <!-- Flags -->
-        <div class="flag flag-de flag-start" title="Start – Germany"></div>
-        <div class="flag flag-fi flag-end" title="Goal – Finland"></div>
-
-        <!-- Runner -->
-        <div id="runner" class="runner">
-          <div class="runner-part runner-hair"></div>
-          <div class="runner-part runner-head"></div>
-          <div class="runner-part runner-beard"></div>
-          <div class="runner-part runner-body"></div>
-          <div class="runner-part runner-arm runner-arm-left"></div>
-          <div class="runner-part runner-arm runner-arm-right"></div>
-          <div class="runner-part runner-leg runner-leg-left"></div>
-          <div class="runner-part runner-leg runner-leg-right"></div>
-        </div>
-
-        <!-- Speech bubble -->
-        <div id="speech" class="speech">
-          Loading thoughts...
-        </div>
-
-        <!-- Goal -->
-        <div id="goal" class="goal">
-          <div class="goal-pole"></div>
-          <div class="goal-flag"></div>
-          <div class="goal-date">15.01.26<br>17:00</div>
-        </div>
-
-        <!-- Milestones -->
-        <div id="ms25" class="milestone">
-          <div class="milestone-sign">25%</div>
-          <div class="milestone-pole"></div>
-        </div>
-        <div id="ms50" class="milestone">
-          <div class="milestone-sign">50%</div>
-          <div class="milestone-pole"></div>
-        </div>
-        <div id="ms75" class="milestone">
-          <div class="milestone-sign">75%</div>
-          <div class="milestone-pole"></div>
-        </div>
-      </div>
-    </div>
-
-    <p id="footerText" class="footer-text">
-      * Good things take time. <span>Keep moving forward through the snow.</span>
+    <h1 id="headline">DAYS REMAIN</h1>
+    <p class="subtitle">
+        From <span>Germany</span> to <span>Finland</span> &mdash; through snow, mushrooms and chaos.
     </p>
-  </div>
 
-  <!-- Snow overlay -->
-  <div id="snow"></div>
+    <div id="musicToggle" class="music-toggle" onclick="toggleMusic()">
+        🎵 Music: <span class="state">OFF</span>
+    </div>
 
-  <!-- Tiny heart -->
-  <div class="heart" title="Stay determined."></div>
 
-  <script>
-    // Target and start times in local time
-    const target = new Date(2026, 0, 15, 17, 0, 0);  // 15 Jan 2026 17:00
-    const start  = new Date(2025, 4, 31, 0, 0, 0);   // 31 May 2025
-    const dayMs  = 1000 * 60 * 60 * 24;
-    const totalDuration = target.getTime() - start.getTime();
-    const totalDays = Math.round(totalDuration / dayMs);
+    <div class="stats">
+        <div class="stat-pill">Days passed: <span id="daysPassed">0</span></div>
+        <div class="stat-pill">Total days: <span id="daysTotal">0</span></div>
+        <div class="stat-pill">Progress: <span id="percentDone">0%</span></div>
+    </div>
 
-    // DOM refs
-    const countdownEl   = document.getElementById("countdown");
-    const runnerEl      = document.getElementById("runner");
-    const trackEl       = document.getElementById("track");
-    const goalEl        = document.getElementById("goal");
-    const footerText    = document.getElementById("footerText");
-    const headline      = document.getElementById("headline");
-    const speechEl      = document.getElementById("speech");
-    const daysPassedEl  = document.getElementById("daysPassed");
-    const daysTotalEl   = document.getElementById("daysTotal");
-    const percentDoneEl = document.getElementById("percentDone");
-    const progressFill  = document.getElementById("progressFill");
-    const ms25          = document.getElementById("ms25");
-    const ms50          = document.getElementById("ms50");
-    const ms75          = document.getElementById("ms75");
-    const sunEl         = document.getElementById("sun");
-    const moonEl        = document.getElementById("moon");
-    const auroraEl      = document.querySelector(".aurora");
+    <div class="progress-wrap">
+        <div class="progress-labels">
+            <span>🇩🇪 Start</span>
+            <span>🇫🇮 Goal</span>
+        </div>
+        <div class="progress-bar">
+            <div id="progressFill" class="progress-fill"></div>
+            <div class="progress-marker" style="left: 25%;"></div>
+            <div class="progress-marker" style="left: 50%;"></div>
+            <div class="progress-marker" style="left: 75%;"></div>
+        </div>
+    </div>
 
-    daysTotalEl.textContent = totalDays;
+    <div class="scene">
+        <div class="aurora"></div>
 
-    function pad(num) {
-      return String(num).padStart(2, "0");
-    }
+        <div class="time-label">
+            Start: <span>31.05.2025</span> &nbsp;|&nbsp;
+            Goal: <span>15.01.2026 &bull; 17:00</span>
+        </div>
 
-    function getSpeech(progressPercent, daysLeft) {
-      if (daysLeft <= 0) {
-        return "Arrived in the snow kingdom. Time for coffee and pulla.";
-      }
-      if (progressPercent < 10) {
-        return "Packing boxes, losing socks, doubting life choices.";
-      } else if (progressPercent < 30) {
-        return "Somewhere between paperwork and panic. Legs still fresh.";
-      } else if (progressPercent < 50) {
-        return "Halfway through the chaos mushrooms. Still running.";
-      } else if (progressPercent < 70) {
-        return "Germany fading behind, Finland getting louder.";
-      } else if (progressPercent < 90) {
-        return "I can already feel the -20°C on my face.";
-      } else {
-        return "Last stretch. Don't trip on the mushrooms now.";
-      }
-    }
+        <div id="countdown" class="countdown">
+            Loading countdown...
+            <small>Time left until you reach the goal.</small>
+        </div>
 
-    function update() {
-      const now = new Date();
-      let diff  = target.getTime() - now.getTime();
-      if (diff < 0) diff = 0;
+        <div class="track-wrapper">
+            <div id="track" class="track">
+                <div class="clouds"></div>
+                <div class="mountains"></div>
+                <div class="forest"></div>
+                <div class="stars">
+                    <div class="star one"></div>
+                    <div class="star two big"></div>
+                    <div class="star three"></div>
+                    <div class="star four big"></div>
+                </div>
 
-      const seconds = Math.floor(diff / 1000) % 60;
-      const minutes = Math.floor(diff / (1000 * 60)) % 60;
-      const hours   = Math.floor(diff / (1000 * 60 * 60)) % 24;
-      const days    = Math.floor(diff / dayMs);
+                <!-- Sun & moon -->
+                <div id="sun" class="orb sun"></div>
+                <div id="moon" class="orb moon"></div>
 
-      // Headline like Majora's Mask
-      headline.textContent = `${days} DAYS REMAIN`;
+                <div class="ground"></div>
 
-      if (diff > 0) {
-        countdownEl.innerHTML =
-          `${pad(days)}d : ${pad(hours)}h : ${pad(minutes)}m : ${pad(seconds)}s` +
-          `<small>Time left until you reach the goal.</small>`;
-      } else {
-        countdownEl.innerHTML =
-          `00d : 00h : 00m : 00s` +
-          `<small>Goal reached! You made it.</small>`;
-        footerText.innerHTML =
-          `* <span>You did it.</span> Thank you for staying determined.`;
-      }
+                <!-- Decorations -->
+                <div class="decor decor-left">
+                    <div class="mushroom"></div>
+                    <div class="mushroom small blue"></div>
+                    <div class="mushroom small purple"></div>
+                    <div class="plant"></div>
+                </div>
+                <div class="decor decor-right">
+                    <div class="mushroom blue"></div>
+                    <div class="mushroom small"></div>
+                    <div class="plant"></div>
+                </div>
 
-      // Progress stats
-      const nowClamped  = Math.min(Math.max(now.getTime(), start.getTime()), target.getTime());
-      const elapsed     = nowClamped - start.getTime();
-      const daysPassed  = Math.round(elapsed / dayMs);
-      const progressRatio   = totalDuration > 0 ? elapsed / totalDuration : 1;
-      const progressPercent = Math.round(progressRatio * 100);
+                <div class="sparkle one"></div>
+                <div class="sparkle two"></div>
+                <div class="sparkle three"></div>
 
-      daysPassedEl.textContent  = daysPassed;
-      percentDoneEl.textContent = progressPercent + "%";
-      progressFill.style.width  = progressPercent + "%";
+                <!-- Flags -->
+                <div class="flag flag-de flag-start" title="Start – Germany"></div>
+                <div class="flag flag-fi flag-end" title="Goal – Finland"></div>
 
-      // Runner position
-      const trackWidth    = trackEl.clientWidth;
-      const runnerWidth   = 26;
-      const goalRightMargin = 70;
-      const startX        = 20;
-      const endX          = trackWidth - goalRightMargin - runnerWidth;
-      const x             = startX + (endX - startX) * progressRatio;
-      runnerEl.style.left = `${Math.max(startX, Math.min(endX, x))}px`;
+                <!-- Runner -->
+                <div id="runner" class="runner">
+                    <div class="runner-part runner-hair"></div>
+                    <div class="runner-part runner-head"></div>
+                    <div class="runner-part runner-beard"></div>
+                    <div class="runner-part runner-body"></div>
+                    <div class="runner-part runner-arm runner-arm-left"></div>
+                    <div class="runner-part runner-arm runner-arm-right"></div>
+                    <div class="runner-part runner-leg runner-leg-left"></div>
+                    <div class="runner-part runner-leg runner-leg-right"></div>
+                </div>
 
-      // Goal scale
-      const goalScale = 0.9 + 0.3 * progressRatio;
-      goalEl.style.transform = `scale(${goalScale})`;
+                <!-- Speech bubble -->
+                <div id="speech" class="speech">
+                    Loading thoughts...
+                </div>
 
-      // Speech bubble
-      speechEl.textContent = getSpeech(progressPercent, days);
+                <!-- Goal -->
+                <div id="goal" class="goal">
+                    <div class="goal-pole"></div>
+                    <div class="goal-flag"></div>
+                    <div class="goal-date">15.01.26<br>17:00</div>
+                </div>
 
-      // Place milestones (fixed at 25/50/75%)
-      function placeMilestone(el, p) {
-        const xPos = startX + (endX - startX) * (p / 100);
-        el.style.left = `${xPos}px`;
-      }
-      placeMilestone(ms25, 25);
-      placeMilestone(ms50, 50);
-      placeMilestone(ms75, 75);
+                <!-- Milestones -->
+                <div id="ms25" class="milestone">
+                    <div class="milestone-sign">25%</div>
+                    <div class="milestone-pole"></div>
+                </div>
+                <div id="ms50" class="milestone">
+                    <div class="milestone-sign">50%</div>
+                    <div class="milestone-pole"></div>
+                </div>
+                <div id="ms75" class="milestone">
+                    <div class="milestone-sign">75%</div>
+                    <div class="milestone-pole"></div>
+                </div>
+            </div>
+        </div>
 
-      // Glow near finish
-      if (progressPercent >= 90 && diff > 0) {
-        runnerEl.style.filter = "drop-shadow(0 0 4px rgba(255,255,255,0.9))";
-      } else {
-        runnerEl.style.filter = "none";
-      }
+        <p id="footerText" class="footer-text">
+            * Good things take time. <span>Keep moving forward through the snow.</span>
+        </p>
+    </div>
 
-      // Sun / moon / aurora cycle
-      const hourFloat = now.getHours() + now.getMinutes() / 60;
-      const dayPhase  = hourFloat / 24; // 0..1
+    <!-- Snow overlay -->
+    <div id="snow"></div>
 
-      const trackRect = trackEl.getBoundingClientRect();
-      const skyHeight = 60; // approximate vertical play area for orbs
+    <!-- Tiny heart -->
+    <div class="heart" title="Stay determined."></div>
+    <div style="width:0;height:0;overflow:hidden;">
+        <iframe id="hiddenYoutubePlayer" width="0" height="0"
+            src="https://www.youtube.com/embed/zF_pLiKSdKA?enablejsapi=1" frameborder="0" allow="autoplay"></iframe>
+    </div>
 
-      // position along width in %
-      const sunXPercent  = 10 + 80 * dayPhase;
-      const moonXPercent = 10 + 80 * ((dayPhase + 0.5) % 1);
+    <script>
+        // Target and start times in local time
+        const target = new Date(2026, 0, 15, 17, 0, 0);  // 15 Jan 2026 17:00
+        const start = new Date(2025, 4, 31, 0, 0, 0);   // 31 May 2025
+        const dayMs = 1000 * 60 * 60 * 24;
+        const totalDuration = target.getTime() - start.getTime();
+        const totalDays = Math.round(totalDuration / dayMs);
 
-      const sunY = 20 - Math.sin(dayPhase * Math.PI) * 18;     // high at midday
-      const moonY = 24 - Math.sin(((dayPhase + 0.5) % 1) * Math.PI) * 18;
+        // DOM refs
+        const countdownEl = document.getElementById("countdown");
+        const runnerEl = document.getElementById("runner");
+        const trackEl = document.getElementById("track");
+        const goalEl = document.getElementById("goal");
+        const footerText = document.getElementById("footerText");
+        const headline = document.getElementById("headline");
+        const speechEl = document.getElementById("speech");
+        const daysPassedEl = document.getElementById("daysPassed");
+        const daysTotalEl = document.getElementById("daysTotal");
+        const percentDoneEl = document.getElementById("percentDone");
+        const progressFill = document.getElementById("progressFill");
+        const ms25 = document.getElementById("ms25");
+        const ms50 = document.getElementById("ms50");
+        const ms75 = document.getElementById("ms75");
+        const sunEl = document.getElementById("sun");
+        const moonEl = document.getElementById("moon");
+        const auroraEl = document.querySelector(".aurora");
 
-      sunEl.style.left  = sunXPercent + "%";
-      sunEl.style.top   = sunY + "px";
+        daysTotalEl.textContent = totalDays;
 
-      moonEl.style.left = moonXPercent + "%";
-      moonEl.style.top  = moonY + "px";
+        function pad(num) {
+            return String(num).padStart(2, "0");
+        }
 
-      const dayWeight  = Math.max(0, Math.sin(dayPhase * Math.PI)); // 0 at midnight, 1 at noon
-      const nightWeight = 1 - dayWeight;
+        function getSpeech(progressPercent, daysLeft) {
+            if (daysLeft <= 0) {
+                return "Arrived in the snow kingdom. Time for coffee and pulla.";
+            }
+            if (progressPercent < 10) {
+                return "Packing boxes, losing socks, doubting life choices.";
+            } else if (progressPercent < 30) {
+                return "Somewhere between paperwork and panic. Legs still fresh.";
+            } else if (progressPercent < 50) {
+                return "Halfway through the chaos mushrooms. Still running.";
+            } else if (progressPercent < 70) {
+                return "Germany fading behind, Finland getting louder.";
+            } else if (progressPercent < 90) {
+                return "I can already feel the -20°C on my face.";
+            } else {
+                return "Last stretch. Don't trip on the mushrooms now.";
+            }
+        }
 
-      sunEl.style.opacity  = 0.1 + 0.9 * dayWeight;
-      moonEl.style.opacity = 0.2 + 0.8 * nightWeight;
+        function startHiddenVideo() {
+            const iframe = document.getElementById("hiddenYoutubePlayer");
+            if (!iframe) return;
 
-      // aurora stronger at night
-      if (auroraEl) {
-        auroraEl.style.opacity = 0.2 + 0.6 * nightWeight;
-      }
-    }
+            iframe.contentWindow.postMessage(
+                JSON.stringify({
+                    event: "command",
+                    func: "playVideo",
+                    args: []
+                }),
+                "*"
+            );
+        }
 
-    update();
-    setInterval(update, 1000);
+        // Pause/stop the hidden video
+        function stopHiddenVideo() {
+            const iframe = document.getElementById("hiddenYoutubePlayer");
+            if (!iframe) return;
 
-    // Snow
-    (function createSnow() {
-      const snowContainer = document.getElementById("snow");
-      const flakes = 110;
-      for (let i = 0; i < flakes; i++) {
-        const span = document.createElement("span");
-        span.className = "snowflake";
-        const size = Math.random() * 3 + 2;
-        span.style.width = size + "px";
-        span.style.height = size + "px";
-        span.style.left = Math.random() * 100 + "vw";
-        span.style.animationDuration = 6 + Math.random() * 8 + "s";
-        span.style.animationDelay = Math.random() * 8 + "s";
-        span.style.opacity = 0.4 + Math.random() * 0.6;
-        snowContainer.appendChild(span);
-      }
-    })();
-  </script>
+            iframe.contentWindow.postMessage(
+                JSON.stringify({
+                    event: "command",
+                    func: "pauseVideo",
+                    args: []
+                }),
+                "*"
+            );
+        }
+
+        function update() {
+            const now = new Date();
+            let diff = target.getTime() - now.getTime();
+            if (diff < 0) diff = 0;
+
+            const seconds = Math.floor(diff / 1000) % 60;
+            const minutes = Math.floor(diff / (1000 * 60)) % 60;
+            const hours = Math.floor(diff / (1000 * 60 * 60)) % 24;
+            const days = Math.floor(diff / dayMs);
+
+            // Headline like Majora's Mask
+            headline.textContent = `${days} DAYS REMAIN`;
+
+            if (diff > 0) {
+                countdownEl.innerHTML =
+                    `${pad(days)}d : ${pad(hours)}h : ${pad(minutes)}m : ${pad(seconds)}s` +
+                    `<small>Time left until you reach the goal.</small>`;
+            } else {
+                countdownEl.innerHTML =
+                    `00d : 00h : 00m : 00s` +
+                    `<small>Goal reached! You made it.</small>`;
+                footerText.innerHTML =
+                    `* <span>You did it.</span> Thank you for staying determined.`;
+            }
+
+            // Progress stats
+            const nowClamped = Math.min(Math.max(now.getTime(), start.getTime()), target.getTime());
+            const elapsed = nowClamped - start.getTime();
+            const daysPassed = Math.round(elapsed / dayMs);
+            const progressRatio = totalDuration > 0 ? elapsed / totalDuration : 1;
+            const progressPercent = Math.round(progressRatio * 100);
+
+            daysPassedEl.textContent = daysPassed;
+            percentDoneEl.textContent = progressPercent + "%";
+            progressFill.style.width = progressPercent + "%";
+
+            // Runner position
+            const trackWidth = trackEl.clientWidth;
+            const runnerWidth = 26;
+            const goalRightMargin = 70;
+            const startX = 20;
+            const endX = trackWidth - goalRightMargin - runnerWidth;
+            const x = startX + (endX - startX) * progressRatio;
+            runnerEl.style.left = `${Math.max(startX, Math.min(endX, x))}px`;
+
+            // Goal scale
+            const goalScale = 0.9 + 0.3 * progressRatio;
+            goalEl.style.transform = `scale(${goalScale})`;
+
+            // Speech bubble
+            speechEl.textContent = getSpeech(progressPercent, days);
+
+            // Place milestones (fixed at 25/50/75%)
+            function placeMilestone(el, p) {
+                const xPos = startX + (endX - startX) * (p / 100);
+                el.style.left = `${xPos}px`;
+            }
+            placeMilestone(ms25, 25);
+            placeMilestone(ms50, 50);
+            placeMilestone(ms75, 75);
+
+            // Glow near finish
+            if (progressPercent >= 90 && diff > 0) {
+                runnerEl.style.filter = "drop-shadow(0 0 4px rgba(255,255,255,0.9))";
+            } else {
+                runnerEl.style.filter = "none";
+            }
+
+            // Sun / moon / aurora cycle
+            const hourFloat = now.getHours() + now.getMinutes() / 60;
+            const dayPhase = hourFloat / 24; // 0..1
+
+            const trackRect = trackEl.getBoundingClientRect();
+            const skyHeight = 60; // approximate vertical play area for orbs
+
+            // position along width in %
+            const sunXPercent = 10 + 80 * dayPhase;
+            const moonXPercent = 10 + 80 * ((dayPhase + 0.5) % 1);
+
+            const sunY = 20 - Math.sin(dayPhase * Math.PI) * 18;     // high at midday
+            const moonY = 24 - Math.sin(((dayPhase + 0.5) % 1) * Math.PI) * 18;
+
+            sunEl.style.left = sunXPercent + "%";
+            sunEl.style.top = sunY + "px";
+
+            moonEl.style.left = moonXPercent + "%";
+            moonEl.style.top = moonY + "px";
+
+            const dayWeight = Math.max(0, Math.sin(dayPhase * Math.PI)); // 0 at midnight, 1 at noon
+            const nightWeight = 1 - dayWeight;
+
+            sunEl.style.opacity = 0.1 + 0.9 * dayWeight;
+            moonEl.style.opacity = 0.2 + 0.8 * nightWeight;
+
+            // aurora stronger at night
+            if (auroraEl) {
+                auroraEl.style.opacity = 0.2 + 0.6 * nightWeight;
+            }
+        }
+
+        update();
+        setInterval(update, 1000);
+
+        // Snow
+        (function createSnow() {
+            const snowContainer = document.getElementById("snow");
+            const flakes = 110;
+            for (let i = 0; i < flakes; i++) {
+                const span = document.createElement("span");
+                span.className = "snowflake";
+                const size = Math.random() * 3 + 2;
+                span.style.width = size + "px";
+                span.style.height = size + "px";
+                span.style.left = Math.random() * 100 + "vw";
+                span.style.animationDuration = 6 + Math.random() * 8 + "s";
+                span.style.animationDelay = Math.random() * 8 + "s";
+                span.style.opacity = 0.4 + Math.random() * 0.6;
+                snowContainer.appendChild(span);
+            }
+        })();
+
+        const musicToggleEl = document.getElementById("musicToggle");
+        let musicPlaying = false;
+
+        function updateMusicNote() {
+            if (!musicToggleEl) return;
+            const stateSpan = musicToggleEl.querySelector(".state");
+            if (!stateSpan) return;
+            stateSpan.textContent = musicPlaying ? "ON" : "OFF";
+        }
+
+        function toggleMusic() {
+            if (musicPlaying) {
+                stopHiddenVideo();
+                musicPlaying = false;
+            } else {
+                startHiddenVideo();
+                musicPlaying = true;
+            }
+            updateMusicNote();
+        }
+
+        updateMusicNote();
+
+
+    </script>
 </body>
+
 </html>
